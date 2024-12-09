@@ -1,7 +1,7 @@
 const express = require("express");
 const routerApp = express.Router();
 
-const appTitulo = require("../apps/titulo/controller/ctlTitulo");
+const appDisciplina = require("../apps/disciplina/controller/ctlDisciplina");
 const appLogin = require("../apps/login/controller/ctlLogin");
 
 // middleware that is specific to this router
@@ -13,12 +13,12 @@ routerApp.get("/", (req, res) => {
   res.send("Olá mundo!");
 });
 
-//Rotas de Titulo
-routerApp.get("/getAllTitulo", appLogin.autenticaJWT, appTitulo.getAllTitulo);
-routerApp.post("/getTituloByID", appLogin.autenticaJWT, appTitulo.getTituloByID);
-routerApp.post("/insertTitulo", appLogin.autenticaJWT, appTitulo.insertTitulo);
-routerApp.post("/updateTitulo", appLogin.autenticaJWT, appTitulo.updateTitulo);
-routerApp.post("/deleteTitulo", appLogin.autenticaJWT, appTitulo.deleteTitulo);
+//Rotas de Disciplina
+routerApp.get("/getAllDisciplina", appLogin.autenticaJWT, appDisciplina.getAllDisciplina);
+routerApp.post("/getDisciplinaByID", appLogin.autenticaJWT, appDisciplina.getDisciplinaByID);
+routerApp.post("/insertDisciplina", appLogin.autenticaJWT, appDisciplina.insertDisciplina);
+routerApp.post("/updateDisciplina", appLogin.autenticaJWT, appDisciplina.updateDisciplina);
+routerApp.post("/deleteDisciplina", appLogin.autenticaJWT, appDisciplina.deleteDisciplina);
 
 // Rota Login
 routerApp.post("/login", appLogin.login);

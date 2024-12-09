@@ -1,0 +1,70 @@
+### Necessário para pegar o token
+### Post
+# @name loginAutenticado
+POST http://localhost:40000/login HTTP/1.1
+content-type: application/json
+
+{    
+    "LoginUsuario": "teste",
+    "SenhaUsuario": "teste"
+}
+### Seta o token
+@accessToken = {{loginAutenticado.response.body.$.token}}
+@username = {{loginAutenticado.response.body.$.username}}
+
+
+
+### teste de inserção de disciplina
+POST http://localhost:40000/insertDisciplina HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idDisciplina": 0,
+    "descricaoDisciplina": "Gastos com Reforma",
+    "valorDisciplina": 5500.00,
+    "dataVencimentoDisciplina": "2024-12-12",
+    "removidoDisciplina": false
+}
+
+### teste de buscar todos os Disciplina
+GET http://localhost:40000/getAllDisciplina HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    
+}
+
+### teste de buscar Disciplina por ID
+POST http://localhost:40000/getDisciplinaByID HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "iddisciplina": 1
+}
+
+
+
+### teste de atualização de Disciplina
+POST http://localhost:40000/updateDisciplina HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idDisciplina": 1,
+    "descricaoDisciplina": "Farmácia",
+    "valorDisciplina": 300.00,
+    "dataVencimentoDisciplina": "2024-11-02",
+    "removidoDisciplina": false
+}
+
+### teste de atualização de Disciplina
+POST http://localhost:40000/deleteDisciplina HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idDisciplina": 4
+}
