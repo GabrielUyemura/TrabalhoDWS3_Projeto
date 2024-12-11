@@ -1,0 +1,70 @@
+### Necessário para pegar o token
+### Post
+# @name loginAutenticado
+POST http://localhost:40000/login HTTP/1.1
+content-type: application/json
+
+{    
+    "LoginUsuario": "teste",
+    "SenhaUsuario": "teste"
+}
+### Seta o token
+@accessToken = {{loginAutenticado.response.body.$.token}}
+@username = {{loginAutenticado.response.body.$.username}}
+
+
+
+### teste de inserção de Curso
+POST http://localhost:40000/insertCurso HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idCurso": 0,
+    "titulo": "Bacharelado Sistemas de informaçãoasd",
+    "dataAbertura": "2020-01-01",
+    "cargaHoraria": 420,
+    "removido": false
+}
+
+### teste de buscar todos os Cursos
+GET http://localhost:40000/getAllCurso HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    
+}
+
+### teste de buscar Curso por ID
+POST http://localhost:40000/getCursoByID HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idcurso": 2
+}
+
+
+
+### teste de atualização de Curso
+POST http://localhost:40000/updateCurso HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idCurso": 2,
+    "titulo": "teste",
+    "dataAbertura": "2021-04-02",
+    "cargaHoraria": 320,
+    "removido": false
+}
+
+### teste de atualização de Titulo
+DELETE http://localhost:40000/deleteCurso HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idCurso": 2
+}
