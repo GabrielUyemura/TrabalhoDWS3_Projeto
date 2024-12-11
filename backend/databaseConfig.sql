@@ -14,19 +14,19 @@ ON CONFLICT DO NOTHING;
 
 -- Criação da tabela Curso
 CREATE TABLE Curso (
-    idCurso INT PRIMARY KEY AUTO_INCREMENT,
+    idCurso SERIAL PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
-    dataabertura DATE NOT NULL,
-    cargahoraria INT NOT NULL,
+    dataAbertura DATE NOT NULL,
+    cargaHoraria INT DEFAULT NULL,
     removido BOOLEAN DEFAULT FALSE
 );
 
 -- Criação da tabela Disciplina
 CREATE TABLE Disciplina (
-    idDisciplina INT PRIMARY KEY AUTO_INCREMENT,
+    idDisciplina SERIAL PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
-    cargahoraria INT NOT NULL,
-    dataabertura DATE NOT NULL,
+    cargaHoraria INT DEFAULT NULL,
+    dataAbertura DATE NOT NULL,
     removido BOOLEAN DEFAULT FALSE,
     idCurso INT NOT NULL,
     FOREIGN KEY (idCurso) REFERENCES Curso(idCurso)
@@ -34,9 +34,9 @@ CREATE TABLE Disciplina (
 
 -- Criação da tabela Aluno
 CREATE TABLE Aluno (
-    idAluno INT PRIMARY KEY AUTO_INCREMENT,
+    idAluno SERIAL PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
-    dataNasc DATE NOT NULL,
+    dataNasc DATE DEFAULT NULL,
     renda DECIMAL(10, 2),
     documento VARCHAR(20) UNIQUE NOT NULL,
     removido BOOLEAN DEFAULT FALSE
@@ -44,8 +44,8 @@ CREATE TABLE Aluno (
 
 -- Criação da tabela DisciplinaAluno (Matrícula)
 CREATE TABLE DisciplinaAluno (
-    idDisciplinaAluno INT PRIMARY KEY AUTO_INCREMENT,
-    datamatricula DATE NOT NULL,
+    idDisciplinaAluno SERIAL PRIMARY KEY,
+    dataMatricula DATE NOT NULL,
     idAluno INT NOT NULL,
     idDisciplina INT NOT NULL,
     FOREIGN KEY (idAluno) REFERENCES Aluno(idAluno),
