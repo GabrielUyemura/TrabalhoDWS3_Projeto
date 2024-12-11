@@ -1,0 +1,70 @@
+### Necessário para pegar o token
+### Post
+# @name loginAutenticado
+POST http://localhost:40000/login HTTP/1.1
+content-type: application/json
+
+{    
+    "LoginUsuario": "teste",
+    "SenhaUsuario": "teste"
+}
+### Seta o token
+@accessToken = {{loginAutenticado.response.body.$.token}}
+@username = {{loginAutenticado.response.body.$.username}}
+
+
+
+### teste de inserção de matricula
+POST http://localhost:40000/insertMatricula HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idDisciplinaAluno": 0,
+    "dataMatricula": "2023-11-02",
+    "idAluno": 1,
+    "idDisciplina": 1,
+    "removido": false
+}
+
+### teste de buscar todos os Matricula
+GET http://localhost:40000/getAllMatricula HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    
+}
+
+### teste de buscar Matricula por ID
+POST http://localhost:40000/getMatriculaByID HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idDisciplinaAluno": 2
+}
+
+
+
+### teste de atualização de Matricula
+PUT http://localhost:40000/updateMatricula HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idDisciplinaAluno": 2,
+    "dataMatricula": "2024-11-02",
+    "idAluno": 2,
+    "idDisciplina": 2,
+    "removido": false
+}
+
+### teste de atualização de Titulo
+DELETE http://localhost:40000/deleteMatricula HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idDisciplinaAluno": 2
+}
