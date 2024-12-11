@@ -48,6 +48,7 @@ CREATE TABLE DisciplinaAluno (
     dataMatricula DATE NOT NULL,
     idAluno INT NOT NULL,
     idDisciplina INT NOT NULL,
+	removido BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (idAluno) REFERENCES Aluno(idAluno),
     FOREIGN KEY (idDisciplina) REFERENCES Disciplina(idDisciplina)
 );
