@@ -21,10 +21,11 @@ Authorization: Bearer {{accessToken}}
 
 {    
     "idDisciplina": 0,
-    "descricaoDisciplina": "Gastos com Reforma",
-    "valorDisciplina": 5500.00,
-    "dataVencimentoDisciplina": "2024-12-12",
-    "removidoDisciplina": false
+    "tituloDisciplina": "Gastos com Reforma",
+    "chDisciplina": 80,
+    "dataAberturaDisciplina": "2024-12-12",
+    "removidoDisciplina": false,
+    "idCurso": 2
 }
 
 ### teste de buscar todos os Disciplina
@@ -42,29 +43,30 @@ content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {    
-    "iddisciplina": 1
+    "iddisciplina": 2
 }
 
 
 
 ### teste de atualização de Disciplina
-POST http://localhost:40000/updateDisciplina HTTP/1.1
+PUT http://localhost:40000/updateDisciplina HTTP/1.1
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {    
-    "idDisciplina": 1,
-    "descricaoDisciplina": "Farmácia",
-    "valorDisciplina": 300.00,
-    "dataVencimentoDisciplina": "2024-11-02",
-    "removidoDisciplina": false
+    "idDisciplina": 2,
+    "tituloDisciplina": "Farmácia",
+    "chDisciplina": 300,
+    "dataAberturaDisciplina": "2024-11-02",
+    "removidoDisciplina": false,
+    "idCurso": 1
 }
 
 ### teste de atualização de Disciplina
-POST http://localhost:40000/deleteDisciplina HTTP/1.1
+DELETE http://localhost:40000/deleteDisciplina HTTP/1.1
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {    
-    "idDisciplina": 4
+    "iddisciplina": 2
 }

@@ -27,12 +27,13 @@ const insertDisciplina = async (disciplinaREGPar) => {
   try {
     linhasAfetadas = (
       await db.query(
-        "INSERT INTO disciplina " + "VALUES(default, $1, $2, $3, $4)",
+        "INSERT INTO disciplina " + "VALUES(default, $1, $2, $3, $4, $5)",
         [
           disciplinaREGPar.tituloDisciplina,
           disciplinaREGPar.chDisciplina,
           disciplinaREGPar.dataAberturaDisciplina,
-          disciplinaREGPar.removidoDisciplina
+          disciplinaREGPar.removidoDisciplina,
+          disciplinaREGPar.idCurso
         ]
       )
     ).rowCount;
@@ -53,7 +54,8 @@ const updateDisciplina = async (disciplinaREGPar) => {
           "tituloDisciplina = $2, " +
           "chDisciplina = $3, " +
           "dataAberturaDisciplina = $4, " +
-          "removidoDisciplina = $5 " +
+          "removidoDisciplina = $5, " +
+          "idCurso = $6 " +
           "WHERE idDisciplina = $1",
         [
           disciplinaREGPar.idDisciplina,
@@ -61,6 +63,7 @@ const updateDisciplina = async (disciplinaREGPar) => {
           disciplinaREGPar.chDisciplina,
           disciplinaREGPar.dataAberturaDisciplina,
           disciplinaREGPar.removidoDisciplina,
+          disciplinaREGPar.idCurso,
         ]
       )
     ).rowCount;

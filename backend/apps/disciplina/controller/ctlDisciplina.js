@@ -7,8 +7,8 @@ const getAllDisciplina = (req, res) =>
     // Formata a data para o formato yyyy-mm-dd
     for (let i = 0; i < registro.length; i++) {
       const row = registro[i];
-      const formattedDate = row.datavencimentodisciplina.toISOString().split('T')[0];
-      row.datavencimentodisciplina = formattedDate;
+      const formattedDate = row.dataaberturadisciplina.toISOString().split('T')[0];
+      row.dataaberturadisciplina = formattedDate;
     }
     res.json({ status: "ok", "registro": registro });
   })();
@@ -21,8 +21,8 @@ const getDisciplinaByID = (req, res) =>
     // Formata a data para o formato yyyy-mm-dd
     for (let i = 0; i < registro.length; i++) {
       const row = registro[i];
-      const formattedDate = row.datavencimentodisciplina.toISOString().split('T')[0];
-      row.datavencimentodisciplina = formattedDate;
+      const formattedDate = row.dataaberturadisciplina.toISOString().split('T')[0];
+      row.dataaberturadisciplina = formattedDate;
     }
 
     res.json({ status: "ok", "registro": registro });

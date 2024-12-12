@@ -24,10 +24,10 @@ CREATE TABLE Curso (
 -- Criação da tabela Disciplina
 CREATE TABLE Disciplina (
     idDisciplina SERIAL PRIMARY KEY,
-    titulo VARCHAR(255) NOT NULL,
-    cargaHoraria INT DEFAULT NULL,
-    dataAbertura DATE NOT NULL,
-    removido BOOLEAN DEFAULT FALSE,
+    tituloDisciplina VARCHAR(255) NOT NULL,
+    chDisciplina INT DEFAULT NULL,
+    dataAberturaDisciplina DATE NOT NULL,
+    removidoDisciplina BOOLEAN DEFAULT FALSE,
     idCurso INT NOT NULL,
     FOREIGN KEY (idCurso) REFERENCES Curso(idCurso)
 );
