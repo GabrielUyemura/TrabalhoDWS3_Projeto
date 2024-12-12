@@ -9,51 +9,46 @@
     <div class="col-xl-12">
 
       <div class="card-header">
-        Manutenção de Cursos
+        Manutenção de Matrículas
       </div>
 
       <div class="card-body">
         <div class="">
           <div style="margin-bottom: 15px;">
-            <a href="/cursos/insertCurso" class="btn btn-primary">
-              Inserir novo curso
+            <a href="/matriculas/insertMatricula" class="btn btn-primary">
+              Inserir Nova Matrícula
             </a>
           </div>
 
           <div style="background-color: #f8f9fa">
-            <table id="tabCursos" class="display" style="width:100%">
+            <table id="tabMatriculas" class="display" style="width:100%">
               <thead>
                 <tr>
                   <th>Ação</th>
-                  <th>Código</th>
-                  <th>Descrição</th>
-                  <th>Ativo</th>
+                  <th>Data da Matrícula</th>
+                  <th>Disciplina</th>
+                  <th>Aluno</th>
                 </tr>
               </thead>
               <tbody>
-                {% for reg in data %}
+                {% for matricula in data %}
                   <tr>
                     <td>
-                      {# Link para visualização dos dados #}
-                      <a href="/cursos/viewCurso/{{ reg.cursoid }}" title="Visualizar">
+                      <a href="/matriculas/viewMatricula/{{ matricula.idDisciplinaAluno }}" title="Visualizar">
                         <i class="fas fa-search"></i>
                       </a>
-
-                      {# Link para atualização dos dados #}
-                      <a href="/cursos/updateCurso/{{ reg.cursoid }}" title="Atualizar" style="margin-left: 10px;">
+                      <a href="/matriculas/updateMatricula/{{ matricula.idDisciplinaAluno }}" title="Atualizar" style="margin-left: 10px;">
                         <i class="fas fa-pencil-alt"></i>
                       </a>
                     </td>
-                    <td>{{ reg.codigo }}</td>
-                    <td>{{ reg.descricao }}</td>
-                    <td>{{ 'Sim' if reg.ativo else 'Não' }}</td>
+                    <td>{{ matricula.dataMatricula }}</td>
+                    <td>{{ matricula.Disciplina.tituloDisciplina }}</td>
+                    <td>{{ matricula.Aluno.titulo }}</td>
                   </tr>
                 {% endfor %}
               </tbody>
             </table>
-
           </div>
-
         </div>
       </div>
     </div>
@@ -61,13 +56,27 @@
 
   <script>
     window.onload = function () {
-      //@ Caso tenha dado erro no servidor frontEnd, ele será mostrado aqui.
-      const localErro = "{{erro}}";
-      if (localErro != "") {
-        alert("[vwCursos|onload] Servidor retornou o erro:" + localErro);
-      }
+      windowOnLoad();
+      const errorMsg = "{{ erro }}";
+      if (errorMsg) 
+        alert(`Erro: ${errorMsg}`);
+      
+      new DataTable('#tabMatriculas');
 
-      new DataTable('#tabCursos');
+      // Format dates in the table
+      document
+        .querySelectorAll('#tabMatriculas tbody tr')
+        .forEach(row => {
+          const dateCell = row.cells[1];
+          const originalDate = dateCell
+            .textContent
+            .trim();
+
+          if (/^\d{4}-\d{2}-\d{2}$/.test(originalDate)) {
+            const [year, month, day] = originalDate.split('-');
+            dateCell.textContent = `${day}/${month}/${year}`;
+          }
+        });
     };
   </script>
 

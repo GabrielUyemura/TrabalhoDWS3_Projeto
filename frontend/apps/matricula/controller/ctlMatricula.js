@@ -23,75 +23,92 @@ const ManutUsers = async (req, res) =>
       }
 
       return res.json({ status: "ok", msg: "Login com sucesso!" });
-    } else {    
+    } else {
       var parametros = { title: "SIAD - Manutenção de usuários" }
       res.render("30100admin/30110adminUser/view/vwAdminUser.njk", { parametros });
     }
   })();
-
 const manutMatricula = async (req, res) =>
   (async () => {
+    // @ Abre o formulário de manutenção de Matrícula
     const userName = req.session.userName;
     const token = req.session.token;
 
-    const resp = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllMatricula", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
-    }).catch(error => {
-      if (error.code === "ECONNREFUSED") {
-        remoteMSG = "Servidor indisponível"
+    try {
+      const resp = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllMatricula", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}` // Set JWT token in the header
+        }
+      });
 
-      } else if (error.code === "ERR_BAD_REQUEST") {
-        remoteMSG = "Usuário não autenticado";
-
-      } else {
-        remoteMSG = error;
-      }
       res.render("matricula/view/vwManutMatricula.njk", {
-        title: "Manutenção de Matrícula",
-        data: null,
-        erro: remoteMSG, 
+        title: "",
+        data: resp.data.registro,
+        erro: null,
         userName: userName,
       });
-    });
+    } catch (error) {
+      let remoteMSG;
 
-    if (!resp) {
-      return;
+      if (error.code === "ECONNREFUSED") {
+        remoteMSG = "Servidor indisponível";
+      } else if (error.code === "ERR_BAD_REQUEST") {
+        remoteMSG = "Usuário não autenticado";
+      } else {
+        remoteMSG = error.message; // Use error.message for more informative messages
+      }
+
+      res.render("matricula/view/vwManutMatricula.njk", {
+        title: "",
+        data: null,
+        erro: remoteMSG, // @ Caso tenha da erro, a mensagem será mostrada na página html como um Alert
+        userName: userName,
+      });
     }
-
-    res.render("matricula/view/vwManutMatricula.njk", {
-      title: "Manutenção de Matrícula",
-      data: resp.data.registro,
-      erro: null,
-      userName: userName,
-    });
   })();
 
 const insertMatricula = async (req, res) =>
   (async () => {
     if (req.method == "GET") {
+      // @ Busca os alunos e disciplinas disponíveis
       const token = req.session.token;
 
-      //@ Busca os Matricula disponíveis
-      const matricula = await axios.get(
-        process.env.SERVIDOR_DW3Back + "/GetAllMatricula", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}` 
-        }
-      });
+      try {
+        const alunos = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllAluno", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
+        });
 
-      return res.render("matricula/view/vwFCrMatricula.njk", {
-        title: "Cadastro de Matricula",
-        data: null,
-        erro: null,
-        Matricula: matricula.data.registro,
-        userName: null,
-      });
+        const disciplinas = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllDisciplina", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        res.render("matricula/view/vwFCrMatricula.njk", {
+          title: "Cadastro de Matrícula",
+          alunos: alunos.data.registro,
+          disciplinas: disciplinas.data.registro,
+          erro: null,
+          userName: null,
+        });
+      } catch (error) {
+        console.error('Erro ao buscar dados para cadastro de matrícula:', error.message);
+        res.render("matricula/view/vwFCrMatricula.njk", {
+          title: "Cadastro de Matrícula",
+          alunos: [],
+          disciplinas: [],
+          erro: "Erro ao buscar dados para cadastro.",
+          userName: null,
+        });
+      }
 
     } else {
+      // @ POST
       const regData = req.body;
       const token = req.session.token;
 
@@ -127,16 +144,16 @@ const viewMatricula = async (req, res) =>
   (async () => {
     const userName = req.session.userName;
     const token = req.session.token;
+
     try {
       if (req.method == "GET") {
         const id = req.params.id;
-        oper = req.params.oper;
         parseInt(id);
 
         response = await axios.post(
           process.env.SERVIDOR_DW3Back + "/getMatriculaByID",
           {
-            iddisciplinaaluno: id,
+            idmatricula: id,
           },
           {
             headers: {
@@ -147,22 +164,10 @@ const viewMatricula = async (req, res) =>
         );
 
         if (response.data.status == "ok") {
-          //@ Busca os Matricula disponíveis
-          const matricula = await axios.get(
-            process.env.SERVIDOR_DW3Back + "/GetAllMatricula", {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`
-            }
-          });
-
-          response.data.registro[0].datamatricula = moment(response.data.registro[0].datamatricula).format("YYYY-MM-DD");
-
           res.render("matricula/view/vwFRUDrMatricula.njk", {
-            title: "Visualização de Matrícula",
+            title: "Visualizar Matrícula",
             data: response.data.registro[0],
             disabled: true,
-            Matricula: matricula.data.registro,
             userName: userName,
           });
         } else {
@@ -171,7 +176,7 @@ const viewMatricula = async (req, res) =>
 
       }
     } catch (erro) {
-      res.json({ status: "[ctlMatricula.js|ViewMatricula] Matrícula não localizado!" });
+      res.json({ status: "[ctlMatricula.js|ViewMatricula] Matrícula não localizada!" });
       console.log(
         "[ctlMatricula.js|viewMatricula] Try Catch: Erro não identificado",
         erro
@@ -183,6 +188,7 @@ const updateMatricula = async (req, res) =>
   (async () => {
     const userName = req.session.userName;
     const token = req.session.token;
+
     try {
       if (req.method == "GET") {
         const id = req.params.id;
@@ -191,7 +197,7 @@ const updateMatricula = async (req, res) =>
         response = await axios.post(
           process.env.SERVIDOR_DW3Back + "/getMatriculaByID",
           {
-            iddisciplinaaluno: id,
+            idmatricula: id,
           },
           {
             headers: {
@@ -202,31 +208,17 @@ const updateMatricula = async (req, res) =>
         );
 
         if (response.data.status == "ok") {
-          //@ Busca os Matricula disponíveis
-          const matricula = await axios.get(
-            process.env.SERVIDOR_DW3Back + "/GetAllMatricula", {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}` // Set JWT token in the header
-            }
-          });
-
-          response.data.registro[0].datamatricula = moment(response.data.registro[0].datamatricula).format(
-            "YYYY-MM-DD"
-          );
-
           res.render("matricula/view/vwFRUDrMatricula.njk", {
-            title: "Atualização de dados de Matrícula",
+            title: "Editar Matrícula",
             data: response.data.registro[0],
             disabled: false,
-            matricula: matricula.data.registro,
             userName: userName,
           });
         } else {
-          console.log("[ctlMatricula|UpdateMatricula] Dados não localizados");
+          console.log("[ctlMatricula|updateMatricula] Dados não localizados");
         }
       } else {
-        //@ POST
+        // @ POST
         const regData = req.body;
         const token = req.session.token;
 
@@ -247,7 +239,7 @@ const updateMatricula = async (req, res) =>
             erro: null,
           });
         } catch (error) {
-          console.error('[ctlMatricula.js|UpdateMatricula] Erro ao atualiza dados de Matrícula no servidor backend:', error.message);
+          console.error('[ctlMatricula.js|UpdateMatricula] Erro ao atualizar dados de Matrícula no servidor backend:', error.message);
           res.json({
             status: "Error",
             msg: error.message,
