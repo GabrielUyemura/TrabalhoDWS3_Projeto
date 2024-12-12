@@ -14,21 +14,22 @@ content-type: application/json
 
 
 
-### teste de inserção de Curso
-POST http://localhost:40000/insertCurso HTTP/1.1
+### teste de inserção de aluno
+POST http://localhost:40000/insertAluno HTTP/1.1
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {    
-    "idCurso": 0,
-    "titulo": "Bacharelado Sistemas de informaçãoasd",
-    "dataAbertura": "2020-01-01",
-    "cargaHoraria": 420,
+    "idAluno": 0,
+    "titulo": "Gabriel Hideki",
+    "dataNasc": "2024-03-08",
+    "renda": 1000.10,
+    "documento": "50000-4A",
     "removido": false
 }
 
-### teste de buscar todos os Cursos
-GET http://localhost:40000/getAllCurso HTTP/1.1
+### teste de buscar todos os aluno
+GET http://localhost:40000/getAllAluno HTTP/1.1
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -36,35 +37,36 @@ Authorization: Bearer {{accessToken}}
     
 }
 
-### teste de buscar Curso por ID
-POST http://localhost:40000/getCursoByID HTTP/1.1
+### teste de buscar aluno por ID
+POST http://localhost:40000/getAlunoByID HTTP/1.1
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {    
-    "idcurso": 2
+    "idaluno": 1
 }
 
 
 
-### teste de atualização de Curso
-PUT http://localhost:40000/updateCurso HTTP/1.1
+### teste de atualização de aluno
+PUT http://localhost:40000/updateAluno HTTP/1.1
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {    
-    "idCurso": 2,
-    "titulo": "asdasdsadas",
-    "dataAbertura": "2021-04-02",
-    "cargaHoraria": 320,
+    "idAluno": 1,
+    "titulo": "Joao vitor",
+    "dataNasc": "2024-03-08",
+    "renda": 5000.10,
+    "documento": "552222F",
     "removido": false
 }
 
-### teste de atualização de Titulo
-DELETE http://localhost:40000/deleteCurso HTTP/1.1
+### teste de atualização de Aluno
+DELETE http://localhost:40000/deleteAluno HTTP/1.1
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {    
-    "idCurso": 2
+    "idAluno": 2
 }
