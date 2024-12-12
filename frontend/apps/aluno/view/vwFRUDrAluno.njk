@@ -1,0 +1,152 @@
+{% extends "templates/base.html" %}
+
+{% block content %}
+  <div x-data="alunoForm()">
+    <ol class="breadcrumb mb-2">
+      <li class="breadcrumb-item active">{{title}}</li>
+    </ol>
+    <div class="row">
+      <div class="col-12">
+
+        <div class="card-header">
+          {{title}}
+        </div>
+
+        <div class="card-body">
+          <div class="">
+            <form>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="titulo">Título</label>
+                    <input type="text" class="form-control" id="titulo" required="required" x-model="form.titulo" x-bind:disabled="disabled">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="dataNasc">Data de Nascimento</label>
+                    <input type="date" class="form-control" id="dataNasc" x-model="form.dataNasc" x-bind:disabled="disabled">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="renda">Renda</label>
+                    <input type="number" step="0.01" class="form-control" id="renda" x-model="form.renda" x-bind:disabled="disabled">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="documento">Documento</label>
+                    <input type="text" class="form-control" id="documento" required="required" x-model="form.documento" x-bind:disabled="disabled">
+                  </div>
+                </div>
+              </div>
+
+              <button type="button" @click="updateForm()" x-show="!disabled" class="btn btn-primary mt-4">Salvar</button>
+              <button type="button" @click="deleteForm()" x-show="!disabled" class="btn btn-danger mt-4">Excluir</button>
+              <a href="/aluno/manutAluno" class="btn btn-info mt-4 ml-2" role="button" aria-disabled="true">Retornar</a>
+            </form>
+
+            <div class="mt-3">
+              <template x-if="message">
+                <div :class="messageClass" x-text="message"></div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.onload = function () {
+        windowOnLoad();
+
+        const localErro = "{{erro}}";
+        if (localErro != "") {
+          alert("[vwFRUDrAluno|onload] Servidor retornou o erro: " + localErro);
+        }
+        $("#titulo").focus();
+      };
+
+      function alunoForm() {
+        return {
+          form: {
+            idAluno: "{{data.idAluno}}",
+            titulo: "{{data.titulo}}",
+            dataNasc: "{{data.dataNasc}}",
+            renda: "{{data.renda}}",
+            documento: "{{data.documento}}",
+            removido: false,
+          },
+          message: '',
+          messageClass: '',
+          disabled: {{disabled}},
+
+          async updateForm() {
+            try {
+              const response = await fetch('/aluno/updateAluno', {
+                method: 'POST',
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(this.form)
+              });
+
+              const result = await response.json();
+              if (result.status == "ok") {
+                alert("Aluno atualizado com sucesso");
+              } else {
+                const errorData = result.status;
+                this.message = `Erro! Não foi possível atualizar o aluno devido ao erro: ${errorData}`;
+                this.messageClass = 'alert alert-danger';
+              }
+            } catch (error) {
+              this.message = `Erro de conexão: ${error.message}`;
+              this.messageClass = 'alert alert-danger';
+            }
+          },
+
+          async deleteForm() {
+            try {
+              const response = await fetch('/aluno/deleteAluno', {
+                method: 'POST',
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ idAluno: this.form.idAluno })
+              });
+
+              const result = await response.json();
+              if (result.status == "ok") {
+                alert("Aluno excluído com sucesso");
+                window.location.href = "/aluno/manutAluno";
+              } else {
+                const errorData = result.status;
+                this.message = `Erro! Não foi possível excluir o aluno devido ao erro: ${errorData}`;
+                this.messageClass = 'alert alert-danger';
+              }
+            } catch (error) {
+              this.message = `Erro de conexão: ${error.message}`;
+              this.messageClass = 'alert alert-danger';
+            }
+          },
+
+          resetForm() {
+            this.form = {
+              titulo: '',
+              dataNasc: '',
+              renda: '',
+              documento: '',
+              removido: false,
+            };
+            this.message = false;
+          }
+        };
+      }
+    </script>
+{% endblock %}
