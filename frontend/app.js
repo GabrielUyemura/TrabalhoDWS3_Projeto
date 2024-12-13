@@ -10,16 +10,18 @@ require('dotenv').config({ path: envFilePath });
 
 const port = process.env.PORT;
 var rtIndex = require('./routes/rtIndex');
-// var rtTitulo = require('./routes/rtTitulo');
 var rtAluno = require('./routes/rtAluno');
+var rtDisciplina = require('./routes/rtDisciplina');
+var rtCurso = require('./routes/rtCurso');
+var rtMatricula = require('./routes/rtMatricula');
 jwtchave = process.env.JWTCHAVE;
 
 var app = express();
 
 nunjucks.configure('apps', {
-    autoescape: true,
-    express: app,
-    watch: true
+  autoescape: true,
+  express: app,
+  watch: true
 });
 
 app.use(express.static(__dirname));
@@ -29,7 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   session({
-    secret: process.env.JWTCHAVE, 
+    secret: process.env.JWTCHAVE,
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: null },
@@ -38,8 +40,10 @@ app.use(
 
 //@ Descreve os grupos de rotas do SIAD
 app.use('/', rtIndex);
-// app.use('/titulo', rtTitulo);
-app.use('/aluno', rtAluno);  // 
+app.use('/aluno', rtAluno);  // aluno
+app.use('/disciplina', rtDisciplina);  // disciplina
+app.use('/curso', rtCurso);  // curso
+app.use('/matricula', rtMatricula);  // matricula
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
