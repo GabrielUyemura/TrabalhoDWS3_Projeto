@@ -127,6 +127,7 @@ const updateAluno = async (req, res) => {
   const userName = req.session.userName;
   const token = req.session.token;
   const id = req.params.id;
+  parseInt(id);
 
   if (req.method === "GET") {
     if (!id) {
@@ -169,7 +170,7 @@ const updateAluno = async (req, res) => {
     const regData = req.body;
 
     try {
-      const response = await axios.post(
+      const response = await axios.put(
         process.env.SERVIDOR_DW3Back + "/updateAluno",
         regData,
         {
@@ -204,10 +205,10 @@ const deleteAluno = async (req, res) => {
   const token = req.session.token;
 
   try {
-    const response = await axios.post(
+    const response = await axios.delete(
       process.env.SERVIDOR_DW3Back + "/deleteAluno",
-      regData,
       {
+        data: regData,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

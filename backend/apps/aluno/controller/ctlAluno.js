@@ -15,7 +15,7 @@ const getAllAluno = (req, res) =>
 
 const getAlunoByID = (req, res) =>
   (async () => {
-    const idAluno = parseInt(req.body.idaluno);
+    const idAluno = parseInt(req.body.idAluno);
     let registro = await mdlAluno.getAlunoByID(idAluno);
 
     // Formata a data para o formato yyyy-mm-dd
