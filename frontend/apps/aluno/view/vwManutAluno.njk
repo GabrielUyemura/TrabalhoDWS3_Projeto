@@ -77,14 +77,22 @@
       document
         .querySelectorAll('#tabAluno tbody tr')
         .forEach(row => {
-          const dateCell = row.cells[2];
-          const originalDate = dateCell
-            .textContent
-            .trim();
+          const dateCell = row.cells[2]; // A célula da data (índice 2)
+          const originalDate = dateCell.textContent.trim();
 
           if (originalDate) {
-            const [year, month, day] = originalDate.split('-');
-            dateCell.textContent = `${day}/${month}/${year}`;
+            // Parse a string da data ISO 8601
+            const date = new Date(originalDate);
+
+            // Verifica se a data é válida
+            if (!isNaN(date)) {
+              const day = String(date.getDate()).padStart(2, '0'); // Adiciona 0 à frente se o dia for menor que 10
+              const month = String(date.getMonth() + 1).padStart(2, '0'); // Meses começam do 0 (Janeiro é 0)
+              const year = date.getFullYear();
+
+              // Atualiza a célula com a data no formato dd/mm/yyyy
+              dateCell.textContent = `${day}/${month}/${year}`;
+            }
           }
         });
     };
