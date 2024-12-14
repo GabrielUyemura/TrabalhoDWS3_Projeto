@@ -2,13 +2,10 @@
 
 {% block content %}
   <div x-data="alunoForm()">
-    <ol class="breadcrumb mb-2">
-      <li class="breadcrumb-item active">{{title}}</li>
-    </ol>
     <div class="row">
       <div class="col-12">
 
-        <div class="card-header">
+        <div class="card-header mt-2">
           {{title}}
         </div>
 
@@ -17,31 +14,31 @@
 
             <form>
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-2">
                   <div class="form-group">
-                    <label for="titulo">Título</label>
-                    <input type="text" class="form-control" id="titulo" x-model="form.titulo" required="required">
+                    <label for="dataNasc">Data de Nascimento</label>
+                    <input type="date" class="form-control" id="dataNasc" x-model="form.dataNasc">
                   </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-5">
                   <div class="form-group">
-                    <label for="dataNasc">Data de Nascimento</label>
-                    <input type="date" class="form-control" id="dataNasc" x-model="form.dataNasc" required="required">
+                    <label for="titulo">Nome</label>
+                    <input type="text" class="form-control" id="titulo" x-model="form.titulo" placeholder="Nome do aluno">
                   </div>
                 </div>
 
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="documento">Documento</label>
-                    <input type="text" class="form-control" id="documento" x-model="form.documento" required="required">
+                    <input type="text" class="form-control" id="documento" x-model="form.documento" placeholder="CPF ou RG">
                   </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <div class="form-group">
-                    <label for="renda">Renda</label>
-                    <input type="number" step="0.01" class="form-control" id="renda" x-model="form.renda">
+                    <label for="renda">Renda Mensal (R$)</label>
+                    <input type="number" step="0.01" class="form-control" id="renda" x-model="form.renda" placeholder="0,00">
                   </div>
                 </div>
               </div>
@@ -63,7 +60,6 @@
   </div>
 
   <script>
-
     window.onload = function () {
       windowOnLoad();
 
@@ -81,12 +77,18 @@
           dataNasc: '',
           documento: '',
           renda: '',
-          removido: false,
+          removido: false
         },
         message: '',
         messageClass: '',
 
         async insertForm() {
+          if (!this.form.dataNasc || !this.form.titulo || !this.form.documento || !this.form.renda) {
+            this.message = 'Preencha todos os campos antes de continuar.';
+            this.messageClass = 'alert alert-warning';
+            return;
+          }
+
           try {
             console.log("Dados enviados:", JSON.stringify(this.form));
             const response = await fetch('/aluno/insertAluno', {
@@ -96,7 +98,7 @@
               },
               body: JSON.stringify(this.form)
             });
-            
+
             const result = await response.json();
             console.log("Resposta do servidor:", response);
             console.log("Dados recebidos:", result);
@@ -120,7 +122,7 @@
             dataNasc: '',
             documento: '',
             renda: '',
-            removido: false,
+            removido: false
           };
           this.message = false;
         }

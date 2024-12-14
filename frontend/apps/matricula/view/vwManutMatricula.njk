@@ -1,15 +1,11 @@
 {% extends "templates/base.html" %}
 
 {% block content %}
-
-  <ol class="breadcrumb mb-2">
-    <li class="breadcrumb-item active">{{title}}</li>
-  </ol>
   <div class="row">
     <div class="col-xl-12">
 
-      <div class="card-header">
-        Manutenção de Matrículas
+      <div class="card-header mt-2">
+        Gerenciar Matrículas
       </div>
 
       <div class="card-body">
@@ -24,18 +20,15 @@
             <table id="tabMatriculas" class="display" style="width:100%">
               <thead>
                 <tr>
-                  <th style="width: 15%; text-align: center;">Data</th>
+                  <th style="width: 10%; text-align: center;">Ações</th>
+                  <th style="width: 15%; text-align: center;">Data de Matrícula</th>
                   <th style="width: 35%; text-align: center;">Disciplina</th>
-                  <th style="width: 35%; text-align: center;">Aluno</th>
-                  <th style="width: 15%; text-align: center;">Ações</th>
+                  <th style="width: 40%; text-align: center;">Aluno</th>
                 </tr>
               </thead>
               <tbody>
                 {% for matricula in data %}
                   <tr>
-                    <td style="text-align: center;">{{ matricula.datamatricula }}</td>
-                    <td style="text-align: center;">{{ matricula.titulodisciplina }}</td>
-                    <td style="text-align: center;">{{ matricula.titulo }}</td>
                     <td style="text-align: center;">
                       <a href="/matricula/viewMatricula/{{ matricula.iddisciplinaaluno }}" title="Visualizar">
                         <i class="fas fa-search"></i>
@@ -44,6 +37,9 @@
                         <i class="fas fa-pencil-alt"></i>
                       </a>
                     </td>
+                    <td style="text-align: center;">{{ matricula.datamatricula }}</td>
+                    <td style="text-align: center;">{{ matricula.titulodisciplina }}</td>
+                    <td style="text-align: center;">{{ matricula.titulo }}</td>
                   </tr>
                 {% endfor %}
               </tbody>
@@ -67,7 +63,7 @@
       document
         .querySelectorAll('#tabMatriculas tbody tr')
         .forEach(row => {
-          const dateCell = row.cells[0];
+          const dateCell = row.cells[1];
           const originalDate = dateCell
             .textContent
             .trim();

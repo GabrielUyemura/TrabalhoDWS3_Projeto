@@ -2,13 +2,10 @@
 
 {% block content %}
   <div x-data="alunoForm()">
-    <ol class="breadcrumb mb-2">
-      <li class="breadcrumb-item active">{{title}}</li>
-    </ol>
     <div class="row">
       <div class="col-12">
 
-        <div class="card-header">
+        <div class="card-header mt-2">
           {{title}}
         </div>
 
@@ -16,7 +13,14 @@
           <div class="">
             <form>
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <label for="dataNasc">Data de Nascimento</label>
+                    <input type="date" class="form-control" id="dataNasc" x-model="form.dataNasc" x-bind:disabled="disabled">
+                  </div>
+                </div>
+
+                <div class="col-md-5">
                   <div class="form-group">
                     <label for="titulo">Título</label>
                     <input type="text" class="form-control" id="titulo" required="required" x-model="form.titulo" x-bind:disabled="disabled">
@@ -25,24 +29,15 @@
 
                 <div class="col-md-3">
                   <div class="form-group">
-                    <label for="dataNasc">Data de Nascimento</label>
-                    <input type="date" class="form-control" id="dataNasc" x-model="form.dataNasc" x-bind:disabled="disabled">
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <label for="renda">Renda</label>
-                    <input type="number" step="0.01" class="form-control" id="renda" x-model="form.renda" x-bind:disabled="disabled">
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
                     <label for="documento">Documento</label>
                     <input type="text" class="form-control" id="documento" required="required" x-model="form.documento" x-bind:disabled="disabled">
+                  </div>
+                </div>
+
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <label for="renda">Renda Mensal (R$)</label>
+                    <input type="number" step="0.01" class="form-control" id="renda" x-model="form.renda" x-bind:disabled="disabled">
                   </div>
                 </div>
               </div>
@@ -81,13 +76,19 @@
             dataNasc: "{{data.dataNasc}}",
             renda: "{{data.renda}}",
             documento: "{{data.documento}}",
-            removido: false,
+            removido: false
           },
           message: '',
           messageClass: '',
           disabled: {{disabled}},
 
           async updateForm() {
+            if (!this.form.dataNasc || !this.form.titulo || !this.form.documento || !this.form.renda) {
+              this.message = 'Preencha todos os campos antes de continuar.';
+              this.messageClass = 'alert alert-warning';
+              return;
+            }
+
             try {
               const response = await fetch('/aluno/updateAluno', {
                 method: 'POST',
@@ -118,7 +119,7 @@
                 headers: {
                   "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ idAluno: this.form.idAluno })
+                body: JSON.stringify({idAluno: this.form.idAluno})
               });
 
               const result = await response.json();
@@ -142,11 +143,11 @@
               dataNasc: '',
               renda: '',
               documento: '',
-              removido: false,
+              removido: false
             };
             this.message = false;
           }
         };
       }
     </script>
-{% endblock %}
+  {% endblock %}

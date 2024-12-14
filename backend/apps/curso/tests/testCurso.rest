@@ -42,7 +42,7 @@ content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {    
-    "idcurso": 2
+    "idCurso": 2
 }
 
 

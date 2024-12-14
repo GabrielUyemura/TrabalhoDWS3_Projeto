@@ -103,9 +103,7 @@ const viewCurso = async (req, res) => {
     );
 
     if (response.data.status === "ok") {
-      response.data.registro[0].dataAbertura = moment(
-        response.data.registro[0].dataAbertura
-      ).format("YYYY-MM-DD");
+      response.data.registro[0].dataabertura = moment(response.data.registro[0].dataabertura).format("YYYY-MM-DD");
 
       res.render("curso/view/vwFRUDrCurso.njk", {
         title: "Visualizar Curso",
@@ -126,8 +124,7 @@ const viewCurso = async (req, res) => {
 const updateCurso = async (req, res) => {
   const userName = req.session.userName;
   const token = req.session.token;
-  const id = req.params.id;
-  parseInt(id);
+  const id = parseInt(req.params.id);
 
   if (req.method === "GET") {
     if (!id) {
@@ -148,10 +145,8 @@ const updateCurso = async (req, res) => {
       );
 
       if (response.data.status === "ok") {
-        response.data.registro[0].dataAbertura = moment(
-          response.data.registro[0].dataAbertura
-        ).format("YYYY-MM-DD");
-
+        response.data.registro[0].dataabertura = moment(response.data.registro[0].dataabertura).format("YYYY-MM-DD");
+        
         res.render("curso/view/vwFRUDrCurso.njk", {
           title: "Editar Curso",
           data: response.data.registro[0],

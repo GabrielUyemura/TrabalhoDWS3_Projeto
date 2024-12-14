@@ -12,7 +12,7 @@ const manutAluno = async (req, res) => {
         Authorization: `Bearer ${token}`,
       },
     });
-
+    
     res.render("aluno/view/vwManutAluno.njk", {
       title: "",
       data: resp.data.registro || [],
@@ -103,9 +103,8 @@ const viewAluno = async (req, res) => {
     );
 
     if (response.data.status === "ok") {
-      response.data.registro[0].dataNasc = moment(
-        response.data.registro[0].dataNasc
-      ).format("YYYY-MM-DD");
+      response.data.registro[0].dataNasc = moment(response.data.registro[0].dataNasc).format("YYYY-MM-DD");
+      response.data.registro[0].renda = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', }).format(Number(response.data.registro[0].renda));
 
       res.render("aluno/view/vwFRUDrAluno.njk", {
         title: "Visualizar Aluno",
@@ -148,9 +147,8 @@ const updateAluno = async (req, res) => {
       );
 
       if (response.data.status === "ok") {
-        response.data.registro[0].dataNasc = moment(
-          response.data.registro[0].dataNasc
-        ).format("YYYY-MM-DD");
+        response.data.registro[0].dataNasc = moment(response.data.registro[0].dataNasc).format("YYYY-MM-DD");
+        response.data.registro[0].renda = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', }).format(Number(response.data.registro[0].renda));
 
         res.render("aluno/view/vwFRUDrAluno.njk", {
           title: "Editar Aluno",

@@ -15,7 +15,7 @@ const getAllCurso = (req, res) =>
 
 const getCursoByID = (req, res) =>
   (async () => {
-    const idCurso = parseInt(req.body.idcurso);
+    const idCurso = parseInt(req.body.idCurso);
     let registro = await mdlCurso.getCursoByID(idCurso);
 
     // Formata a data para o formato yyyy-mm-dd

@@ -13,7 +13,7 @@ var rtIndex = require('./routes/rtIndex');
 var rtAluno = require('./routes/rtAluno');
 // var rtDisciplina = require('./routes/rtDisciplina');
 var rtCurso = require('./routes/rtCurso');
-// var rtMatricula = require('./routes/rtMatricula');
+var rtMatricula = require('./routes/rtMatricula');
 jwtchave = process.env.JWTCHAVE;
 
 var app = express();
@@ -43,7 +43,7 @@ app.use('/', rtIndex);
 app.use('/aluno', rtAluno);  // aluno
 // app.use('/disciplina', rtDisciplina);  // disciplina
 app.use('/curso', rtCurso);  // curso
-// app.use('/matricula', rtMatricula);  // matricula
+app.use('/matricula', rtMatricula);  // matricula
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

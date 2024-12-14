@@ -2,13 +2,10 @@
 
 {% block content %}
   <div x-data="cursoForm()">
-    <ol class="breadcrumb mb-2">
-      <li class="breadcrumb-item active">{{ title }}</li>
-    </ol>
     <div class="row">
       <div class="col-12">
 
-        <div class="card-header">
+        <div class="card-header mt-2">
           {{ title }}
         </div>
 
@@ -16,21 +13,21 @@
           <div class="">
             <form>
               <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="titulo">Título</label>
-                    <input type="text" class="form-control" id="titulo" required="required" x-model="form.titulo" x-bind:disabled="disabled">
-                  </div>
-                </div>
-
-                <div class="col-md-3">
+                <div class="col-md-2">
                   <div class="form-group">
                     <label for="dataAbertura">Data de Abertura</label>
                     <input type="date" class="form-control" id="dataAbertura" x-model="form.dataAbertura" x-bind:disabled="disabled">
                   </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-8">
+                  <div class="form-group">
+                    <label for="titulo">Título</label>
+                    <input type="text" class="form-control" id="titulo" required="required" x-model="form.titulo" x-bind:disabled="disabled">
+                  </div>
+                </div>
+
+                <div class="col-md-2">
                   <div class="form-group">
                     <label for="cargaHoraria">Carga Horária</label>
                     <input type="number" class="form-control" id="cargaHoraria" x-model="form.cargaHoraria" x-bind:disabled="disabled">
@@ -67,17 +64,23 @@
       function cursoForm() {
         return {
           form: {
-            idCurso: "{{ data.idCurso }}",
+            idCurso: "{{ data.idcurso }}",
             titulo: "{{ data.titulo }}",
-            dataAbertura: "{{ data.dataAbertura }}",
-            cargaHoraria: "{{ data.cargaHoraria }}",
-            removido: false,
+            dataAbertura: "{{ data.dataabertura }}",
+            cargaHoraria: "{{ data.cargahoraria }}",
+            removido: false
           },
           message: '',
           messageClass: '',
           disabled: {{ disabled }},
 
           async updateForm() {
+            if (!this.form.dataAbertura || !this.form.titulo || !this.form.cargaHoraria) {
+              this.message = 'Preencha todos os campos antes de continuar.';
+              this.messageClass = 'alert alert-warning';
+              return;
+            }
+
             try {
               const response = await fetch('/curso/updateCurso', {
                 method: 'POST',
@@ -108,7 +111,7 @@
                 headers: {
                   "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ idCurso: this.form.idCurso })
+                body: JSON.stringify({idCurso: this.form.idCurso})
               });
 
               const result = await response.json();
@@ -131,11 +134,11 @@
               titulo: '',
               dataAbertura: '',
               cargaHoraria: '',
-              removido: false,
+              removido: false
             };
             this.message = '';
           }
         };
       }
     </script>
-{% endblock %}
+  {% endblock %}

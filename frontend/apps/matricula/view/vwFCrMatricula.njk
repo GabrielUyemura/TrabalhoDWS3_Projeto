@@ -2,13 +2,10 @@
 
 {% block content %}
   <div x-data="matriculaForm()">
-    <ol class="breadcrumb mb-2">
-      <li class="breadcrumb-item active">{{title}}</li>
-    </ol>
     <div class="row">
       <div class="col-12">
 
-        <div class="card-header">
+        <div class="card-header mt-2">
           {{title}}
         </div>
 
@@ -19,14 +16,14 @@
                 <div class="col-md-2">
                   <div class="form-group mt-3">
                     <label for="dataMatricula">Data de Matrícula</label>
-                    <input type="date" name="dataMatricula" id="dataMatricula" class="form-control" x-model="form.dataMatricula" required="required">
+                    <input type="date" name="dataMatricula" id="dataMatricula" class="form-control" x-model="form.dataMatricula">
                   </div>
                 </div>
 
                 <div class="col-md-5">
                   <div class="form-group mt-3">
                     <label for="idAluno">Aluno</label>
-                    <select name="idAluno" id="idAluno" class="form-control" x-model="form.idAluno" required="required">
+                    <select name="idAluno" id="idAluno" class="form-control" x-model="form.idAluno">
                       <option value="" disabled="disabled" selected="selected">Selecione</option>
                       {% for aluno in alunos %}
                         <option value="{{ aluno.idaluno }}">{{ aluno.titulo }}</option>
@@ -38,7 +35,7 @@
                 <div class="col-md-5">
                   <div class="form-group mt-3">
                     <label for="idDisciplina">Disciplina</label>
-                    <select name="idDisciplina" id="idDisciplina" class="form-control" x-model="form.idDisciplina" required="required">
+                    <select name="idDisciplina" id="idDisciplina" class="form-control" x-model="form.idDisciplina">
                       <option value="" disabled="disabled" selected="selected">Selecione</option>
                       {% for disciplina in disciplinas %}
                         <option value="{{ disciplina.iddisciplina }}">{{ disciplina.titulodisciplina }}</option>
@@ -50,7 +47,7 @@
 
               <div class="mt-4">
                 <button type="button" @click="insertForm()" class="btn btn-primary mt-4">Salvar</button>
-                <a href="/matricula/manutMatricula"class="btn btn-danger mt-4 ml-2" role="button" aria-disabled="true">Cancelar</a>
+                <a href="/matricula/manutMatricula" class="btn btn-danger mt-4 ml-2" role="button" aria-disabled="true">Cancelar</a>
               </div>
 
               <div class="mt-3">
@@ -91,6 +88,12 @@
         messageClass: '',
 
         async insertForm() {
+          if (!this.form.dataMatricula || !this.form.idAluno || !this.form.idDisciplina) {
+            this.message = 'Preencha todos os campos antes de continuar.';
+            this.messageClass = 'alert alert-warning';
+            return;
+          }
+
           try {
             console.log("Valor na página:", JSON.stringify(this.form))
             const response = await fetch('/matricula/insertMatricula', {

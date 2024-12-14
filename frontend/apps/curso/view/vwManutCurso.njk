@@ -1,15 +1,11 @@
 {% extends "templates/base.html" %}
 
 {% block content %}
-
-  <ol class="breadcrumb mb-2">
-    <li class="breadcrumb-item active">{{ title }}</li>
-  </ol>
   <div class="row">
     <div class="col-xl-12">
 
-      <div class="card-header">
-        Gerenciamento de Cursos
+      <div class="card-header mt-2">
+        Gerenciar de Cursos
       </div>
 
       <div class="card-body">
@@ -24,16 +20,16 @@
             <table id="tabCurso" class="display" style="width:100%">
               <thead>
                 <tr>
-                  <th>Ação</th>
-                  <th>Título</th>
-                  <th>Data de Abertura</th>
-                  <th>Carga Horária</th>
+                  <th style="width: 10%; text-align: center;">Ações</th>
+                  <th style="width: 15%; text-align: center;">Data de Abertura</th>
+                  <th style="width: 60%; text-align: center;">Título</th>
+                  <th style="width: 15%; text-align: center;">Carga Horária</th>
                 </tr>
               </thead>
               <tbody>
                 {% for reg in data %}
                   <tr>
-                    <td>
+                    <td style="text-align: center;">
                       {# Link para visualização dos dados #}
                       <a href="/curso/viewCurso/{{ reg.idcurso }}" title="Visualizar">
                         <i class="fas fa-search"></i>
@@ -44,9 +40,9 @@
                         <i class="fas fa-pencil-alt"></i>
                       </a>
                     </td>
-                    <td>{{ reg.titulo }}</td>
-                    <td>{{ reg.dataabertura }}</td>
-                    <td>{{ reg.cargahoraria }}</td>
+                    <td style="text-align: center;">{{ reg.dataabertura }}</td>
+                    <td style="text-align: center;">{{ reg.titulo }}</td>
+                    <td style="text-align: center;">{{ reg.cargahoraria }}</td>
                   </tr>
                 {% endfor %}
               </tbody>
@@ -74,22 +70,39 @@
       document
         .querySelectorAll('#tabCurso tbody tr')
         .forEach(row => {
-          const dateCell = row.cells[2]; // A célula da data de abertura (índice 2)
-          const originalDate = dateCell.textContent.trim();
+          const dateCell = row.cells[1];
+          const originalDate = dateCell
+            .textContent
+            .trim();
 
           if (originalDate) {
-            // Parse a string da data ISO 8601
             const date = new Date(originalDate);
-
-            // Verifica se a data é válida
             if (!isNaN(date)) {
               const day = String(date.getDate()).padStart(2, '0');
               const month = String(date.getMonth() + 1).padStart(2, '0');
               const year = date.getFullYear();
-
-              // Atualiza a célula com a data no formato dd/mm/yyyy
               dateCell.textContent = `${day}/${month}/${year}`;
             }
+          }
+        });
+
+      // Formata o valor da carga horária para o padrão brasileiro
+      document
+        .querySelectorAll('#tabCurso tbody tr')
+        .forEach(row => {
+          const currencyCell = row.cells[3];
+          const originalCurrency = currencyCell
+            .textContent
+            .trim();
+
+          const numericValue = parseFloat(originalCurrency.replace(/[^\d.-]/g, ''));
+          if (!isNaN(numericValue)) {
+            currencyCell.textContent = new Intl
+              .NumberFormat('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              })
+              .format(numericValue);
           }
         });
     };
