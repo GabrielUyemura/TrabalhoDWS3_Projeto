@@ -1,33 +1,8 @@
 const { Cookie } = require("express-session");
 const moment = require("moment");
 const axios = require("axios");
+const { response } = require("express");
 
-const ManutUsers = async (req, res) =>
-  (async () => {
-    if (req.method == "POST") {
-      const formData = req.body;
-      if (!validate.Validar(formData)) {
-        return res.status(400).json({ status: "error", msg: "Dados de entrada validados" });
-      };
-
-      const resp = await axios.post(process.env.SERVIDOR_DW3Back + "/login", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).catch(error => {
-        return res.status(400).json({ status: "error", msg: error.response.data.msg });
-      });
-
-      if (!resp.data) {
-        return;
-      }
-
-      return res.json({ status: "ok", msg: "Login com sucesso!" });
-    } else {
-      var parametros = { title: "SIAD - Manutenção de usuários" }
-      res.render("30100admin/30110adminUser/view/vwAdminUser.njk", { parametros });
-    }
-  })();
 const manutMatricula = async (req, res) =>
   (async () => {
     // @ Abre o formulário de manutenção de Matrícula
@@ -38,7 +13,7 @@ const manutMatricula = async (req, res) =>
       const resp = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllMatricula", {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}` // Set JWT token in the header
+          Authorization: `Bearer ${token}`
         }
       });
 
@@ -56,7 +31,7 @@ const manutMatricula = async (req, res) =>
       } else if (error.code === "ERR_BAD_REQUEST") {
         remoteMSG = "Usuário não autenticado";
       } else {
-        remoteMSG = error.message; // Use error.message for more informative messages
+        remoteMSG = error.message;
       }
 
       res.render("matricula/view/vwManutMatricula.njk", {
@@ -147,13 +122,12 @@ const viewMatricula = async (req, res) =>
 
     try {
       if (req.method == "GET") {
-        const id = req.params.id;
-        parseInt(id);
+        const id = parseInt(req.params.id);
 
-        response = await axios.post(
+        matriculaResponse = await axios.post(
           process.env.SERVIDOR_DW3Back + "/getMatriculaByID",
           {
-            idmatricula: id,
+            idDisciplinaAluno: id,
           },
           {
             headers: {
@@ -163,13 +137,44 @@ const viewMatricula = async (req, res) =>
           }
         );
 
-        if (response.data.status == "ok") {
-          res.render("matricula/view/vwFRUDrMatricula.njk", {
-            title: "Visualizar Matrícula",
-            data: response.data.registro[0],
-            disabled: true,
-            userName: userName,
-          });
+        if (matriculaResponse.data.status == "ok") {
+          try {
+            const alunos = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllAluno", {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              }
+            });
+
+            const disciplinas = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllDisciplina", {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              }
+            });
+
+            const matricula = matriculaResponse.data.registro[0];
+            matricula.datamatricula = moment(matricula.datamatricula).format("YYYY-MM-DD");
+
+            res.render("matricula/view/vwFRUDrMatricula.njk", {
+              title: "Visualizar Matrícula",
+              data: matricula,
+              disabled: true,
+              alunos: alunos.data.registro,
+              disciplinas: disciplinas.data.registro,
+              userName: userName,
+            });
+          } catch (error) {
+            console.error('Erro ao buscar dados para visualizar matrícula:', error.message);
+            res.render("matricula/view/vwFRUDrMatricula.njk", {
+              title: "Visualizar Matrícula",
+              data: [],
+              alunos: [],
+              disciplinas: [],
+              erro: "Erro ao buscar dados para visualizar.",
+              userName: null,
+            });
+          }
         } else {
           console.log("[ctlMatricula|ViewMatricula] ID de Matrícula não localizado!");
         }
@@ -194,10 +199,10 @@ const updateMatricula = async (req, res) =>
         const id = req.params.id;
         parseInt(id);
 
-        response = await axios.post(
+        matriculaResponse = await axios.post(
           process.env.SERVIDOR_DW3Back + "/getMatriculaByID",
           {
-            idmatricula: id,
+            idDisciplinaAluno: id,
           },
           {
             headers: {
@@ -207,13 +212,44 @@ const updateMatricula = async (req, res) =>
           }
         );
 
-        if (response.data.status == "ok") {
-          res.render("matricula/view/vwFRUDrMatricula.njk", {
-            title: "Editar Matrícula",
-            data: response.data.registro[0],
-            disabled: false,
-            userName: userName,
-          });
+        if (matriculaResponse.data.status == "ok") {
+          try {
+            const alunos = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllAluno", {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              }
+            });
+
+            const disciplinas = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllDisciplina", {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              }
+            });
+
+            const matricula = matriculaResponse.data.registro[0];
+            matricula.datamatricula = moment(matricula.datamatricula).format("YYYY-MM-DD");
+
+            res.render("matricula/view/vwFRUDrMatricula.njk", {
+              title: "Editar Matrícula",
+              data: matricula,
+              disabled: false,
+              alunos: alunos.data.registro,
+              disciplinas: disciplinas.data.registro,
+              userName: userName,
+            });
+          } catch (error) {
+            console.error('Erro ao buscar dados para visualizar matrícula:', error.message);
+            res.render("matricula/view/vwFRUDrMatricula.njk", {
+              title: "Editar Matrícula",
+              data: [],
+              alunos: [],
+              disciplinas: [],
+              erro: "Erro ao buscar dados para visualizar.",
+              userName: null,
+            });
+          }
         } else {
           console.log("[ctlMatricula|updateMatricula] Dados não localizados");
         }
@@ -224,7 +260,7 @@ const updateMatricula = async (req, res) =>
 
         try {
           // @ Enviando dados para o servidor Backend
-          const response = await axios.post(process.env.SERVIDOR_DW3Back + "/updateMatricula", regData, {
+          const response = await axios.put(process.env.SERVIDOR_DW3Back + "/updateMatricula", regData, {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
@@ -260,19 +296,21 @@ const updateMatricula = async (req, res) =>
 
 const deleteMatricula = async (req, res) =>
   (async () => {
-    //@ POST
     const regData = req.body;
     const token = req.session.token;
 
     try {
-      // @ Enviando dados para o servidor Backend
-      const response = await axios.post(process.env.SERVIDOR_DW3Back + "/deleteMatricula", regData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        timeout: 5000, // @ 5 segundos de timeout
-      });
+      const response = await axios.delete(
+        process.env.SERVIDOR_DW3Back + "/deleteMatricula",
+        {
+          data: regData,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          timeout: 5000,
+        }
+      );
 
       res.json({
         status: response.data.status,
@@ -292,7 +330,6 @@ const deleteMatricula = async (req, res) =>
   })();
 
 module.exports = {
-  ManutUsers,
   manutMatricula,
   insertMatricula,
   viewMatricula,

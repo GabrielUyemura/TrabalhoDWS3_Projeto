@@ -3,19 +3,23 @@ const db = require("../../../database/databaseconfig");
 const getAllMatricula = async () => {
   return (
     await db.query(
-      "SELECT * FROM DisciplinaAluno " +
-      "WHERE removido = false " +
-      "ORDER BY dataMatricula ASC"
+      "SELECT da.*, a.titulo, d.tituloDisciplina FROM DisciplinaAluno da " +
+      "LEFT JOIN Aluno a ON a.idAluno = da.idAluno " +
+      "LEFT JOIN Disciplina d ON d.idDisciplina = da.idDisciplina " +
+      "WHERE da.removido = false " +
+      "ORDER BY da.dataMatricula ASC"
     )
   ).rows;
 };
 
-const getMatriculaByID = async (idMatriculaPAR) => {
+const getMatriculaByID = async (idDisciplinaAlunoPAR) => {
   return (
     await db.query(
-      "SELECT * FROM DisciplinaAluno " +
-      "WHERE idDisciplinaAluno = $1 AND removido = false ",
-      [idMatriculaPAR]
+      "SELECT da.*, a.titulo, d.tituloDisciplina FROM DisciplinaAluno da " +
+      "LEFT JOIN Aluno a ON a.idAluno = da.idAluno " +
+      "LEFT JOIN Disciplina d ON d.idDisciplina = da.idDisciplina " +
+      "WHERE da.idDisciplinaAluno = $1 AND da.removido = false",
+      [idDisciplinaAlunoPAR]
     )
   ).rows;
 };

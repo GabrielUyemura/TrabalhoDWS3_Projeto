@@ -15,8 +15,8 @@
       <div class="card-body">
         <div class="">
           <div style="margin-bottom: 15px;">
-            <a href="/matriculas/insertMatricula" class="btn btn-primary">
-              Inserir Nova Matrícula
+            <a href="/matricula/insertMatricula" class="btn btn-primary">
+              Cadastrar Matrícula
             </a>
           </div>
 
@@ -24,26 +24,26 @@
             <table id="tabMatriculas" class="display" style="width:100%">
               <thead>
                 <tr>
-                  <th>Ação</th>
-                  <th>Data da Matrícula</th>
-                  <th>Disciplina</th>
-                  <th>Aluno</th>
+                  <th style="width: 15%; text-align: center;">Data</th>
+                  <th style="width: 35%; text-align: center;">Disciplina</th>
+                  <th style="width: 35%; text-align: center;">Aluno</th>
+                  <th style="width: 15%; text-align: center;">Ações</th>
                 </tr>
               </thead>
               <tbody>
                 {% for matricula in data %}
                   <tr>
-                    <td>
-                      <a href="/matriculas/viewMatricula/{{ matricula.idDisciplinaAluno }}" title="Visualizar">
+                    <td style="text-align: center;">{{ matricula.datamatricula }}</td>
+                    <td style="text-align: center;">{{ matricula.titulodisciplina }}</td>
+                    <td style="text-align: center;">{{ matricula.titulo }}</td>
+                    <td style="text-align: center;">
+                      <a href="/matricula/viewMatricula/{{ matricula.iddisciplinaaluno }}" title="Visualizar">
                         <i class="fas fa-search"></i>
                       </a>
-                      <a href="/matriculas/updateMatricula/{{ matricula.idDisciplinaAluno }}" title="Atualizar" style="margin-left: 10px;">
+                      <a href="/matricula/updateMatricula/{{ matricula.iddisciplinaaluno }}" title="Atualizar" style="margin-left: 10px;">
                         <i class="fas fa-pencil-alt"></i>
                       </a>
                     </td>
-                    <td>{{ matricula.dataMatricula }}</td>
-                    <td>{{ matricula.Disciplina.tituloDisciplina }}</td>
-                    <td>{{ matricula.Aluno.titulo }}</td>
                   </tr>
                 {% endfor %}
               </tbody>
@@ -67,7 +67,7 @@
       document
         .querySelectorAll('#tabMatriculas tbody tr')
         .forEach(row => {
-          const dateCell = row.cells[1];
+          const dateCell = row.cells[0];
           const originalDate = dateCell
             .textContent
             .trim();

@@ -14,8 +14,8 @@ const getAllMatricula = (req, res) =>
 
 const getMatriculaByID = (req, res) =>
   (async () => {
-    const idMatricula = parseInt(req.body.idDisciplinaAluno);
-    let registro = await mdlMatricula.getMatriculaByID(idMatricula);
+    const idDisciplinaAluno = parseInt(req.body.idDisciplinaAluno);
+    let registro = await mdlMatricula.getMatriculaByID(idDisciplinaAluno);
 
     // Formata a data para o formato yyyy-mm-dd
     for (let i = 0; i < registro.length; i++) {

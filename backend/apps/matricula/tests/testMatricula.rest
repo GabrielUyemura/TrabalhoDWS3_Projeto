@@ -42,7 +42,7 @@ content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {    
-    "idDisciplinaAluno": 2
+    "idDisciplinaAluno": 1
 }
 
 
