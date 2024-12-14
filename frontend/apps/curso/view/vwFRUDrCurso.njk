@@ -1,0 +1,141 @@
+{% extends "templates/base.html" %}
+
+{% block content %}
+  <div x-data="cursoForm()">
+    <ol class="breadcrumb mb-2">
+      <li class="breadcrumb-item active">{{ title }}</li>
+    </ol>
+    <div class="row">
+      <div class="col-12">
+
+        <div class="card-header">
+          {{ title }}
+        </div>
+
+        <div class="card-body">
+          <div class="">
+            <form>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="titulo">Título</label>
+                    <input type="text" class="form-control" id="titulo" required="required" x-model="form.titulo" x-bind:disabled="disabled">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="dataAbertura">Data de Abertura</label>
+                    <input type="date" class="form-control" id="dataAbertura" x-model="form.dataAbertura" x-bind:disabled="disabled">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="cargaHoraria">Carga Horária</label>
+                    <input type="number" class="form-control" id="cargaHoraria" x-model="form.cargaHoraria" x-bind:disabled="disabled">
+                  </div>
+                </div>
+              </div>
+
+              <button type="button" @click="updateForm()" x-show="!disabled" class="btn btn-primary mt-4">Salvar</button>
+              <button type="button" @click="deleteForm()" x-show="!disabled" class="btn btn-danger mt-4">Excluir</button>
+              <a href="/curso/manutCurso" class="btn btn-info mt-4 ml-2" role="button" aria-disabled="true">Retornar</a>
+            </form>
+
+            <div class="mt-3">
+              <template x-if="message">
+                <div :class="messageClass" x-text="message"></div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.onload = function () {
+        windowOnLoad();
+
+        const localErro = "{{ erro }}";
+        if (localErro != "") {
+          alert("[vwFRUDrCurso|onload] Servidor retornou o erro: " + localErro);
+        }
+        $("#titulo").focus();
+      };
+
+      function cursoForm() {
+        return {
+          form: {
+            idCurso: "{{ data.idCurso }}",
+            titulo: "{{ data.titulo }}",
+            dataAbertura: "{{ data.dataAbertura }}",
+            cargaHoraria: "{{ data.cargaHoraria }}",
+            removido: false,
+          },
+          message: '',
+          messageClass: '',
+          disabled: {{ disabled }},
+
+          async updateForm() {
+            try {
+              const response = await fetch('/curso/updateCurso', {
+                method: 'POST',
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(this.form)
+              });
+
+              const result = await response.json();
+              if (result.status == "ok") {
+                alert("Curso atualizado com sucesso");
+              } else {
+                const errorData = result.status;
+                this.message = `Erro! Não foi possível atualizar o curso devido ao erro: ${errorData}`;
+                this.messageClass = 'alert alert-danger';
+              }
+            } catch (error) {
+              this.message = `Erro de conexão: ${error.message}`;
+              this.messageClass = 'alert alert-danger';
+            }
+          },
+
+          async deleteForm() {
+            try {
+              const response = await fetch('/curso/deleteCurso', {
+                method: 'POST',
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ idCurso: this.form.idCurso })
+              });
+
+              const result = await response.json();
+              if (result.status == "ok") {
+                alert("Curso excluído com sucesso");
+                window.location.href = "/curso/manutCurso";
+              } else {
+                const errorData = result.status;
+                this.message = `Erro! Não foi possível excluir o curso devido ao erro: ${errorData}`;
+                this.messageClass = 'alert alert-danger';
+              }
+            } catch (error) {
+              this.message = `Erro de conexão: ${error.message}`;
+              this.messageClass = 'alert alert-danger';
+            }
+          },
+
+          resetForm() {
+            this.form = {
+              titulo: '',
+              dataAbertura: '',
+              cargaHoraria: '',
+              removido: false,
+            };
+            this.message = '';
+          }
+        };
+      }
+    </script>
+{% endblock %}
