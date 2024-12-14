@@ -1,86 +1,76 @@
 {% extends "templates/base.html" %}
 
 {% block content %}
-
-  <ol class="breadcrumb mb-2">
-    <li class="breadcrumb-item active">{{title}}</li>
-  </ol>
   <div class="row">
     <div class="col-xl-12">
 
-      <div class="card-header">
-        Gerenciamento de Contas a Pagar
+      <div class="card-header mt-2">
+        Gerenciar Disciplinas
       </div>
 
       <div class="card-body">
         <div class="">
           <div style="margin-bottom: 15px;">
             <a href="/disciplina/insertDisciplina" class="btn btn-primary">
-              Cadastrar Conta a Pagar
+              Cadastrar Disciplina
             </a>
           </div>
 
           <div style="background-color: #f8f9fa">
-            <table id="tabDisciplina" class="display" style="width:100%">
+            <table id="tabDisciplinas" class="display" style="width:100%">
               <thead>
                 <tr>
-                  <th>Ação</th>
-                  <th>Título</th>
-                  <th>Data de Abertura</th>
-                  <th>Carga Horária</th>
+                  <th style="width: 10%; text-align: center;">Ações</th>
+                  <th style="width: 15%; text-align: center;">Abertura de Disciplina</th>
+                  <th style="width: 20%; text-align: center;">Título</th>
+                  <th style="width: 35%; text-align: center;">Carga Horária</th>
+                  <th style="width: 40%; text-align: center;">Cursos</th>
                 </tr>
               </thead>
               <tbody>
-                {% for reg in data %}
+                {% for disciplina in data %}
                   <tr>
-                    <td>
-                      {# Link para visualização dos dados #}
-                      <a href="/disciplina/viewDisciplina/{{ reg.iddisciplina }}" title="Visualizar">
+                    <td style="text-align: center;">
+                      <a href="/disciplina/viewDisciplina/{{ disciplina.iddisciplina }}" title="Visualizar">
                         <i class="fas fa-search"></i>
                       </a>
-
-                      {# Link para atualuzação e remoção dos dados#}
-                      <a href="/disciplina/updateDisciplina/{{ reg.iddisciplina }}" title="Atualizar" style="margin-left: 10px;">
+                      <a href="/disciplina/updateDisciplina/{{ disciplina.iddisciplina }}" title="Atualizar" style="margin-left: 10px;">
                         <i class="fas fa-pencil-alt"></i>
                       </a>
                     </td>
-                    <td>{{reg.tituloDisciplina}}</td>
-                    <td>{{reg.dataAberturaDisciplina}}</td>
-                    <td>{{reg.chDisciplina}}</td>
+                    <td style="text-align: center;">{{ disciplina.dataaberturadisciplina }}</td>
+                    <td style="text-align: center;">{{ disciplina.titulodisciplina }}</td>
+                    <td style="text-align: center;">{{ disciplina.chdisciplina }}</td>
+                    <td style="text-align: center;">{{ disciplina.titulo }}</td>
                   </tr>
                 {% endfor %}
               </tbody>
             </table>
-
           </div>
-
         </div>
       </div>
     </div>
   </div>
 
   <script>
-
     window.onload = function () {
       windowOnLoad();
-      //@ Caso tenha dado erro no servidor frontEnd, ele será mostrado aqui.
-      const localErro = "{{erro}}";
-      if (localErro != "") {
-        alert("[vwDisciplina|onload]Servidor retornou o erro:" + localErro);
-      }
+      const errorMsg = "{{ erro }}";
+      if (errorMsg) 
+        alert(`Erro: ${errorMsg}`);
+      
+      new DataTable('#tabDisciplinas');
 
-      new DataTable('#tabDisciplina');
-
-      // Formatar datas no padrão dd-mm-yyyy
+      // Format dates in the table
       document
-        .querySelectorAll('#tabDisciplina tbody tr')
+        .querySelectorAll('#tabDisciplinas tbody tr')
         .forEach(row => {
-          const dateCell = row.cells[2];
+          const dateCell = row.cells[1];
           const originalDate = dateCell
             .textContent
             .trim();
 
-          if (originalDate) {
+          if (/^\d{4}-\d{2}-\d{2}$/.test(originalDate)) {
             const [year, month, day] = originalDate.split('-');
             dateCell.textContent = `${day}/${month}/${year}`;
           }

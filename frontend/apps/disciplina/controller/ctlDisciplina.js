@@ -1,6 +1,7 @@
 const { Cookie } = require("express-session");
-const axios = require("axios");
 const moment = require('moment');
+const axios = require("axios");
+const { response } = require("express");
 
 const manutDisciplina = async (req, res) =>
   (async () => {
@@ -8,66 +9,73 @@ const manutDisciplina = async (req, res) =>
     const userName = req.session.userName;
     const token = req.session.token;
 
-    const resp = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllDisciplina", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}` // Set JWT token in the header
-      }
-    }).catch(error => {
-      if (error.code === "ECONNREFUSED") {
-        remoteMSG = "Servidor indisponível"
+    try {
+      const resp = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllDisciplina", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      });
 
+      res.render("disciplina/view/vwManutDisciplina.njk", {
+        title: "",
+        data: resp.data.registro,
+        erro: null,
+        userName: userName,
+      });
+    } catch (error) {
+      let remoteMSG;
+
+      if (error.code === "ECONNREFUSED") {
+        remoteMSG = "Servidor indisponível";
       } else if (error.code === "ERR_BAD_REQUEST") {
         remoteMSG = "Usuário não autenticado";
-
       } else {
-        remoteMSG = error;
+        remoteMSG = error.message;
       }
+
       res.render("disciplina/view/vwManutDisciplina.njk", {
         title: "",
         data: null,
-        erro: remoteMSG, //@ Caso tenha da erro, a mensagem será mostrada na página html como um Alert
+        erro: remoteMSG, // @ Caso tenha da erro, a mensagem será mostrada na página html como um Alert
         userName: userName,
       });
-    });
-
-    if (!resp) {
-      return;
     }
-
-
-    res.render("disciplina/view/vwManutDisciplina.njk", {
-      title: "",
-      data: resp.data.registro,
-      erro: null,
-      userName: userName,
-    });
   })();
 
 
 const insertDisciplina = async (req, res) =>
   (async () => {
     if (req.method == "GET") {
+      // @ Busca os cursos disponíveis
       const token = req.session.token;
 
-      //@ Busca os cursos disponíveis
-      const cursos = await axios.get(
-        process.env.SERVIDOR_DW3Back + "/getAllDisciplina", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}` // Set JWT token in the header
-        }
-      });
+      try {
+        const cursos = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllCurso", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
+        });
 
-      return res.render("disciplina/view/vwFCrDisciplina.njk", {
-        title: "Cadastro de Disciplina",
-        data: null,
-        erro: null, //@ Caso tenha da erro, a mensagem será mostrada na página html como um Alert
-        userName: null,
-      });
+        res.render("disciplina/view/vwFCrDisciplina.njk", {
+          title: "Cadastro de Disciplina",
+          cursos: cursos.data.registro,
+          erro: null,
+          userName: null,
+        });
+      } catch (error) {
+        console.error('Erro ao buscar dados para cadastro de disciplina:', error.message);
+        res.render("disciplina/view/vwFCrDisciplina.njk", {
+          title: "Cadastro de Disciplina",
+          cursos: [],
+          erro: "Erro ao buscar dados para cadastro.",
+          userName: null,
+        });
+      }
 
     } else {
-      //@ POST
+      // @ POST
       const regData = req.body;
       const token = req.session.token;
 
@@ -99,6 +107,7 @@ const insertDisciplina = async (req, res) =>
     }
   })();
 
+
 const viewDisciplina = async (req, res) =>
   (async () => {
     const userName = req.session.userName;
@@ -106,15 +115,12 @@ const viewDisciplina = async (req, res) =>
 
     try {
       if (req.method == "GET") {
-        const id = req.params.id;
-        oper = req.params.oper;
-        parseInt(id);
+        const id = parseInt(req.params.id);
 
-
-        response = await axios.post(
+        disciplinaResponse = await axios.post(
           process.env.SERVIDOR_DW3Back + "/getDisciplinaByID",
           {
-            iddisciplina: id,
+            idDisciplina: id,
           },
           {
             headers: {
@@ -124,25 +130,43 @@ const viewDisciplina = async (req, res) =>
           }
         );
 
-        if (response.data.status == "ok") {
+        if (disciplinaResponse.data.status == "ok") {
+          try {
+            const cursos = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllCurso", {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              }
+            });
 
-          response.data.registro[0].datavencimentodisciplina = moment(response.data.registro[0].datavencimentodisciplina).format(
-            "YYYY-MM-DD"
-          );
+            const disciplina = disciplinaResponse.data.registro[0];
+            disciplina.dataaberturadisciplina = moment(disciplina.dataaberturadisciplina).format("YYYY-MM-DD");
 
-          res.render("disciplina/view/vwFRUDrDisciplina.njk", {
-            title: "Visualizar Disciplina",
-            data: response.data.registro[0],
-            disabled: true,
-            userName: userName,
-          });
+            res.render("disciplina/view/vwFRUDrDisciplina.njk", {
+              title: "Visualizar Disciplina",
+              data: disciplina,
+              disabled: true,
+              cursos: cursos.data.registro,
+              userName: userName,
+            });
+          } catch (error) {
+            console.error('Erro ao buscar dados para visualizar disciplina:', error.message);
+            res.render("disciplina/view/vwFRUDrDisciplina.njk", {
+              title: "Visualizar Disciplina",
+              data: [],
+              cursos: [],
+              disciplinas: [],
+              erro: "Erro ao buscar dados para visualizar.",
+              userName: null,
+            });
+          }
         } else {
           console.log("[ctlDisciplina|ViewDisciplina] ID de Disciplina não localizado!");
         }
 
       }
     } catch (erro) {
-      res.json({ status: "[ctlDisciplina.js|ViewDisciplina] Disciplina não localizado!" });
+      res.json({ status: "[ctlDisciplina.js|ViewDisciplina] Disciplina não localizada!" });
       console.log(
         "[ctlDisciplina.js|viewDisciplina] Try Catch: Erro não identificado",
         erro
@@ -154,15 +178,16 @@ const updateDisciplina = async (req, res) =>
   (async () => {
     const userName = req.session.userName;
     const token = req.session.token;
+
     try {
       if (req.method == "GET") {
         const id = req.params.id;
         parseInt(id);
 
-        response = await axios.post(
+        disciplinaResponse = await axios.post(
           process.env.SERVIDOR_DW3Back + "/getDisciplinaByID",
           {
-            iddisciplina: id,
+            idDisciplina: id,
           },
           {
             headers: {
@@ -172,28 +197,47 @@ const updateDisciplina = async (req, res) =>
           }
         );
 
-        if (response.data.status == "ok") {
-          response.data.registro[0].datavencimentodisciplina = moment(response.data.registro[0].datavencimentodisciplina).format(
-            "YYYY-MM-DD"
-          );
+        if (disciplinaResponse.data.status == "ok") {
+          try {
+            const cursos = await axios.get(process.env.SERVIDOR_DW3Back + "/getAllCurso", {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              }
+            });
 
-          res.render("disciplina/view/vwFRUDrDisciplina.njk", {
-            title: "Editar Disciplina",
-            data: response.data.registro[0],
-            disabled: false,
-            userName: userName,
-          });
+            const disciplina = disciplinaResponse.data.registro[0];
+            disciplina.datadisciplina = moment(disciplina.datadisciplina).format("YYYY-MM-DD");
+
+            res.render("disciplina/view/vwFRUDrDisciplina.njk", {
+              title: "Editar Disciplina",
+              data: disciplina,
+              disabled: false,
+              cursos: cursos.data.registro,
+              userName: userName,
+            });
+          } catch (error) {
+            console.error('Erro ao buscar dados para visualizar disciplina:', error.message);
+            res.render("disciplina/view/vwFRUDrDisciplina.njk", {
+              title: "Editar Disciplina",
+              data: [],
+              cursos: [],
+              disciplinas: [],
+              erro: "Erro ao buscar dados para visualizar.",
+              userName: null,
+            });
+          }
         } else {
           console.log("[ctlDisciplina|updateDisciplina] Dados não localizados");
         }
       } else {
-        //@ POST
+        // @ POST
         const regData = req.body;
         const token = req.session.token;
-  
+
         try {
           // @ Enviando dados para o servidor Backend
-          const response = await axios.post(process.env.SERVIDOR_DW3Back + "/updateDisciplina", regData, {
+          const response = await axios.put(process.env.SERVIDOR_DW3Back + "/updateDisciplina", regData, {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
@@ -229,19 +273,21 @@ const updateDisciplina = async (req, res) =>
 
 const deleteDisciplina = async (req, res) =>
   (async () => {
-    //@ POST
     const regData = req.body;
     const token = req.session.token;
 
     try {
-      // @ Enviando dados para o servidor Backend
-      const response = await axios.post(process.env.SERVIDOR_DW3Back + "/deleteDisciplina", regData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        timeout: 5000, // @ 5 segundos de timeout
-      });
+      const response = await axios.delete(
+        process.env.SERVIDOR_DW3Back + "/deleteDisciplina",
+        {
+          data: regData,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          timeout: 5000,
+        }
+      );
 
       res.json({
         status: response.data.status,
@@ -250,7 +296,7 @@ const deleteDisciplina = async (req, res) =>
         erro: null,
       });
     } catch (error) {
-      console.error('[ctlDisciplina.js|DeleteDisciplina] Erro ao deletar dados de Disciplina no servidor backend:', error.message);
+      console.error('[ctlDisciplina|DeleteDisciplina] Erro ao excluir dados de Disciplina no servidor backend:', error.message);
       res.json({
         status: "Error",
         msg: error.message,
@@ -265,5 +311,5 @@ module.exports = {
   insertDisciplina,
   viewDisciplina,
   updateDisciplina,
-  deleteDisciplina
+  deleteDisciplina,
 };

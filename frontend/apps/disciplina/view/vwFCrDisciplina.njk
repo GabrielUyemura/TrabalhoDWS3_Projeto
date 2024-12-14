@@ -23,15 +23,25 @@
                     <input type="text" class="form-control" id="tituloDisciplina" x-model="form.tituloDisciplina" required="required">
                   </div>
                 </div>
-
-                <div class="col-md-3">
+                <div class="col-md-6">
+                  <div class="form-group mt-3">
+                    <label for="idCurso">Curso</label>
+                    <select name="idCurso" id="idCurso" class="form-control" x-model="form.idCurso">
+                      <option value="" disabled="disabled" selected="selected">Selecione</option>
+                      {% for curso in cursos %}
+                        <option value="{{ curso.idcurso }}">{{ curso.titulo }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
                   <div class="form-group">
                     <label for="chDisciplina">Carga Horária (CH)</label>
                     <input type="number" class="form-control" id="chDisciplina" x-model="form.chDisciplina" required="required">
                   </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-6">
                   <div class="form-group">
                     <label for="dataAberturaDisciplina">Data de Abertura</label>
                     <input type="date" class="form-control" id="dataAberturaDisciplina" x-model="form.dataAberturaDisciplina" required="required">
@@ -73,12 +83,18 @@
           tituloDisciplina: '',
           dataAberturaDisciplina: '',
           chDisciplina: '',
-          removidoDisciplina: false,
+          idCurso: '',
+          removidoDisciplina: false
         },
         message: '',
         messageClass: '',
 
         async insertForm() {
+          if (!this.form.tituloDisciplina || !this.form.dataAberturaDisciplina || !this.form.idCurso || !this.form.chDisciplina) {
+            this.message = 'Preencha todos os campos antes de continuar.';
+            this.messageClass = 'alert alert-warning';
+            return;
+          }
           try {
             console.log("Dados enviados:", JSON.stringify(this.form));
             const response = await fetch('/disciplina/insertDisciplina', {
@@ -111,6 +127,7 @@
             tituloDisciplina: '',
             dataAberturaDisciplina: '',
             chDisciplina: '',
+            idCurso: '',
             removidoDisciplina: false,
           };
           this.message = false;

@@ -2,15 +2,13 @@ var express = require('express');
 var router = express.Router();
 var disciplinaApp = require("../apps/disciplina/controller/ctlDisciplina")
 
-
-
 //Função necessária para evitar que usuários não autenticados acessem o sistema.
 function authenticationMiddleware(req, res, next) {
     // Verificar se existe uma sessão válida.
     isLogged = req.session.isLogged;    
   
     if (!isLogged) {      
-      res.redirect("/Login");
+        res.redirect("/Login");
     }
     next();
 }; 
