@@ -8,8 +8,6 @@ async function vwLogin() {
   if (!Validar(formData)) {
     return false;
   } else {
-    //const passwordCrypto = CryptoJS.MD5(formData.get('Password')).toString();
-    //formData.set('Password', passwordCrypto); 
 
     resp = await axios.post('login', formData, {
       headers: {
@@ -18,7 +16,6 @@ async function vwLogin() {
     })
       .catch(error => {        
         alert('Error:' + error.response.data.msg);
-        // Handle any errors
         return;
       });
 

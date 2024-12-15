@@ -13,13 +13,11 @@ function authenticationMiddleware(req, res, next) {
     next();
 }; 
   
-/* GET métodos */
 router.get('/manutDisciplina', authenticationMiddleware, disciplinaApp.manutDisciplina)
 router.get('/insertDisciplina', authenticationMiddleware, disciplinaApp.insertDisciplina);
 router.get('/viewDisciplina/:id', authenticationMiddleware, disciplinaApp.viewDisciplina);
 router.get('/updateDisciplina/:id', authenticationMiddleware, disciplinaApp.updateDisciplina);
 
-/* POST métodos */
 router.post('/insertDisciplina', authenticationMiddleware, disciplinaApp.insertDisciplina);
 router.post('/updateDisciplina', authenticationMiddleware, disciplinaApp.updateDisciplina);
 router.post('/deleteDisciplina', authenticationMiddleware, disciplinaApp.deleteDisciplina);

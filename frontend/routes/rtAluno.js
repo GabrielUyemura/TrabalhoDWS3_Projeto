@@ -13,13 +13,11 @@ function authenticationMiddleware(req, res, next) {
     next();
 }; 
 
-/* GET métodos */
 router.get('/manutAluno', authenticationMiddleware, alunoApp.manutAluno);  // Alterando para manutAluno
 router.get('/insertAluno', authenticationMiddleware, alunoApp.insertAluno);  // Alterando para insertAluno
 router.get('/viewAluno/:id', authenticationMiddleware, alunoApp.viewAluno);  // Alterando para viewAluno
 router.get('/updateAluno/:id', authenticationMiddleware, alunoApp.updateAluno);  // Alterando para updateAluno
 
-/* POST métodos */
 router.post('/insertAluno', authenticationMiddleware, alunoApp.insertAluno);  // Alterando para insertAluno
 router.post('/updateAluno', authenticationMiddleware, alunoApp.updateAluno);  // Alterando para updateAluno
 router.post('/deleteAluno', authenticationMiddleware, alunoApp.deleteAluno);  // Alterando para deleteAluno

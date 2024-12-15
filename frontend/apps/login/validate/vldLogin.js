@@ -22,10 +22,8 @@ function Validar(formDataPar) {
 
     const errors = validate(formDataPar, constraints);
 
-    // Display validation errors if any
     if (errors) {
-        const errorMessages = Object.values(errors).flat();            
-        //alert(errorMessages[0]);
+        const errorMessages = Object.values(errors).flat(); 
         return false;
     }
     return true;

@@ -7,7 +7,6 @@ const appAluno = require("../apps/aluno/controller/ctlAluno");
 const appDisciplina = require("../apps/disciplina/controller/ctlDisciplina");
 const appMatricula = require("../apps/matricula/controller/ctlMatricula");
 
-// middleware that is specific to this router
 routerApp.use((req, res, next) => {
   next();
 });

@@ -38,12 +38,11 @@ app.use(
   })
 );
 
-//@ Descreve os grupos de rotas do SIAD
 app.use('/', rtIndex);
-app.use('/aluno', rtAluno);  // aluno
-app.use('/disciplina', rtDisciplina);  // disciplina
-app.use('/curso', rtCurso);  // curso
-app.use('/matricula', rtMatricula);  // matricula
+app.use('/aluno', rtAluno);
+app.use('/disciplina', rtDisciplina);
+app.use('/curso', rtCurso); 
+app.use('/matricula', rtMatricula); 
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

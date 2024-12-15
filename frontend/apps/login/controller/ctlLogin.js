@@ -7,7 +7,6 @@ const axios = require("axios");
 const Login = async (req, res) =>
   (async () => {
     let remoteMSG = "sem mais informações";
-    //req.session.destroy();
     if (req.method == "POST") {      
       const formData = req.body;      
       if (!validate.Validar(formData)) {
@@ -18,7 +17,7 @@ const Login = async (req, res) =>
         headers: {
           "Content-Type": "application/json",
         },
-        timeout: 2000, //@ Define um, TIMEOUT de 2 segundos
+        timeout: 2000,
       }).catch(error => {           
           if (error.code === "ECONNREFUSED" ) {            
             remoteMSG = "Servidor indisponível"
@@ -45,7 +44,7 @@ const Login = async (req, res) =>
       session.tempoInativoMaximoFront = process.env.tempoInativoMaximoFront;
       res.cookie("tempoInativoMaximoFront", process.env.tempoInativoMaximoFront, { sameSite: 'strict' });
       return res.json({ status: "ok", msg: "Login com sucesso!" });
-    } else { //GET      
+    } else {    
       var parametros = { title: "DW3 - Login", teste: "'192.168.13.1'", constraint: JSON.stringify(validate.constraints) }
       res.render("login/view/vwLogin.njk", parametros);
     }

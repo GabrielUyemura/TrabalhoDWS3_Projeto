@@ -13,13 +13,11 @@ function authenticationMiddleware(req, res, next) {
     next();
 };
 
-/* GET métodos */
 router.get('/manutMatricula', authenticationMiddleware, matriculaApp.manutMatricula);  // Alterando para manutMatricula
 router.get('/insertMatricula', authenticationMiddleware, matriculaApp.insertMatricula);  // Alterando para insertMatricula
 router.get('/viewMatricula/:id', authenticationMiddleware, matriculaApp.viewMatricula);  // Alterando para viewMatricula
 router.get('/updateMatricula/:id', authenticationMiddleware, matriculaApp.updateMatricula);  // Alterando para updateMatricula
 
-/* POST métodos */
 router.post('/insertMatricula', authenticationMiddleware, matriculaApp.insertMatricula);  // Alterando para insertMatricula
 router.post('/updateMatricula', authenticationMiddleware, matriculaApp.updateMatricula);  // Alterando para updateMatricula
 router.post('/deleteMatricula', authenticationMiddleware, matriculaApp.deleteMatricula);  // Alterando para deleteMatricula

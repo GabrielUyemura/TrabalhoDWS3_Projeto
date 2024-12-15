@@ -5,7 +5,7 @@ const getAllMatricula = (req, res) =>
     let registro = await mdlMatricula.getAllMatricula();
 
     for (let i = 0; i < registro.length; i++) {
-      const row = registro[i]; // Current row      
+      const row = registro[i];   
       const formattedDate = row.datamatricula.toISOString().split('T')[0];
       row.datamatricula = formattedDate;
     }
@@ -17,7 +17,6 @@ const getMatriculaByID = (req, res) =>
     const idDisciplinaAluno = parseInt(req.body.idDisciplinaAluno);
     let registro = await mdlMatricula.getMatriculaByID(idDisciplinaAluno);
 
-    // Formata a data para o formato yyyy-mm-dd
     for (let i = 0; i < registro.length; i++) {
       const row = registro[i];
       const formattedDate = row.datamatricula.toISOString().split('T')[0];

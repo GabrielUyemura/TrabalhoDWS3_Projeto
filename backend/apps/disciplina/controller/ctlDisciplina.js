@@ -4,7 +4,6 @@ const getAllDisciplina = (req, res) =>
   (async () => {
     let registro = await mdlDisciplina.getAllDisciplina();
 
-    // Formata a data para o formato yyyy-mm-dd
     for (let i = 0; i < registro.length; i++) {
       const row = registro[i];
       const formattedDate = row.dataaberturadisciplina.toISOString().split('T')[0];
@@ -18,7 +17,6 @@ const getDisciplinaByID = (req, res) =>
     const idDisciplina = parseInt(req.body.iddisciplina);
     let registro = await mdlDisciplina.getDisciplinaByID(idDisciplina);
 
-    // Formata a data para o formato yyyy-mm-dd
     for (let i = 0; i < registro.length; i++) {
       const row = registro[i];
       const formattedDate = row.dataaberturadisciplina.toISOString().split('T')[0];
