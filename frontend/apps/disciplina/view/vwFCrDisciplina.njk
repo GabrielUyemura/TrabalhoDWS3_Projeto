@@ -2,13 +2,10 @@
 
 {% block content %}
   <div x-data="disciplinaForm()">
-    <ol class="breadcrumb mb-2">
-      <li class="breadcrumb-item active">{{title}}</li>
-    </ol>
     <div class="row">
       <div class="col-12">
 
-        <div class="card-header">
+        <div class="card-header mt-2">
           {{title}}
         </div>
 
@@ -17,14 +14,15 @@
 
             <form>
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-2">
                   <div class="form-group">
-                    <label for="tituloDisciplina">Título da Disciplina</label>
-                    <input type="text" class="form-control" id="tituloDisciplina" x-model="form.tituloDisciplina" required="required">
+                    <label for="dataAberturaDisciplina">Data de Abertura</label>
+                    <input type="date" class="form-control" id="dataAberturaDisciplina" x-model="form.dataAberturaDisciplina">
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group mt-3">
+
+                <div class="col-md-3">
+                  <div class="form-group">
                     <label for="idCurso">Curso</label>
                     <select name="idCurso" id="idCurso" class="form-control" x-model="form.idCurso">
                       <option value="" disabled="disabled" selected="selected">Selecione</option>
@@ -34,17 +32,18 @@
                     </select>
                   </div>
                 </div>
-                <div class="col-md-6">
+
+                <div class="col-md-5">
                   <div class="form-group">
-                    <label for="chDisciplina">Carga Horária (CH)</label>
-                    <input type="number" class="form-control" id="chDisciplina" x-model="form.chDisciplina" required="required">
+                    <label for="tituloDisciplina">Título</label>
+                    <input type="text" class="form-control" id="tituloDisciplina" x-model="form.tituloDisciplina" placeholder="Título da Disciplina">
                   </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-2">
                   <div class="form-group">
-                    <label for="dataAberturaDisciplina">Data de Abertura</label>
-                    <input type="date" class="form-control" id="dataAberturaDisciplina" x-model="form.dataAberturaDisciplina" required="required">
+                    <label for="chDisciplina">Carga Horária</label>
+                    <input type="number" class="form-control" id="chDisciplina" x-model="form.chDisciplina" placeholder="Carga Horária da Disciplina">
                   </div>
                 </div>
               </div>
@@ -104,7 +103,7 @@
               },
               body: JSON.stringify(this.form)
             });
-            
+
             const result = await response.json();
             console.log("Resposta do servidor:", response);
             console.log("Dados recebidos:", result);
@@ -128,7 +127,7 @@
             dataAberturaDisciplina: '',
             chDisciplina: '',
             idCurso: '',
-            removidoDisciplina: false,
+            removidoDisciplina: false
           };
           this.message = false;
         }

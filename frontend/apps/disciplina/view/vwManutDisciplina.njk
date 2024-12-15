@@ -21,10 +21,10 @@
               <thead>
                 <tr>
                   <th style="width: 10%; text-align: center;">Ações</th>
-                  <th style="width: 15%; text-align: center;">Abertura de Disciplina</th>
-                  <th style="width: 20%; text-align: center;">Título</th>
-                  <th style="width: 35%; text-align: center;">Carga Horária</th>
-                  <th style="width: 40%; text-align: center;">Cursos</th>
+                  <th style="width: 15%; text-align: center;">Data de Abertura</th>
+                  <th style="width: 30%; text-align: center;">Curso</th>
+                  <th style="width: 30%; text-align: center;">Título</th>
+                  <th style="width: 15%; text-align: center;">Carga Horária</th>
                 </tr>
               </thead>
               <tbody>
@@ -39,9 +39,9 @@
                       </a>
                     </td>
                     <td style="text-align: center;">{{ disciplina.dataaberturadisciplina }}</td>
-                    <td style="text-align: center;">{{ disciplina.titulodisciplina }}</td>
-                    <td style="text-align: center;">{{ disciplina.chdisciplina }}</td>
                     <td style="text-align: center;">{{ disciplina.titulo }}</td>
+                    <td style="text-align: center;">{{ disciplina.titulodisciplina }}</td>
+                    <td style="text-align: center;">{{ disciplina.chdisciplina}}</td>
                   </tr>
                 {% endfor %}
               </tbody>
@@ -61,7 +61,7 @@
       
       new DataTable('#tabDisciplinas');
 
-      // Format dates in the table
+      // Formatar datas no padrão dd/mm/yyyy
       document
         .querySelectorAll('#tabDisciplinas tbody tr')
         .forEach(row => {

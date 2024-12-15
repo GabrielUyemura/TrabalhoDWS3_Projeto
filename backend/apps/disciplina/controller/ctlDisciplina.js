@@ -14,7 +14,7 @@ const getAllDisciplina = (req, res) =>
 
 const getDisciplinaByID = (req, res) =>
   (async () => {
-    const idDisciplina = parseInt(req.body.iddisciplina);
+    const idDisciplina = parseInt(req.body.idDisciplina);
     let registro = await mdlDisciplina.getDisciplinaByID(idDisciplina);
 
     for (let i = 0; i < registro.length; i++) {
