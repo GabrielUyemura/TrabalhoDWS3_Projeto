@@ -5,7 +5,6 @@ const { response } = require("express");
 
 const manutMatricula = async (req, res) =>
   (async () => {
-    // @ Abre o formulário de manutenção de Matrícula
     const userName = req.session.userName;
     const token = req.session.token;
 
@@ -37,7 +36,7 @@ const manutMatricula = async (req, res) =>
       res.render("matricula/view/vwManutMatricula.njk", {
         title: "",
         data: null,
-        erro: remoteMSG, // @ Caso tenha da erro, a mensagem será mostrada na página html como um Alert
+        erro: remoteMSG,
         userName: userName,
       });
     }
@@ -46,7 +45,6 @@ const manutMatricula = async (req, res) =>
 const insertMatricula = async (req, res) =>
   (async () => {
     if (req.method == "GET") {
-      // @ Busca os alunos e disciplinas disponíveis
       const token = req.session.token;
 
       try {
@@ -83,18 +81,16 @@ const insertMatricula = async (req, res) =>
       }
 
     } else {
-      // @ POST
       const regData = req.body;
       const token = req.session.token;
 
       try {
-        // @ Enviando dados para o servidor Backend
         const response = await axios.post(process.env.SERVIDOR_DW3Back + "/insertMatricula", regData, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
-          timeout: 5000, // @ 5 segundos de timeout
+          timeout: 5000, 
         });
 
         res.json({
@@ -254,18 +250,16 @@ const updateMatricula = async (req, res) =>
           console.log("[ctlMatricula|updateMatricula] Dados não localizados");
         }
       } else {
-        // @ POST
         const regData = req.body;
         const token = req.session.token;
 
         try {
-          // @ Enviando dados para o servidor Backend
           const response = await axios.put(process.env.SERVIDOR_DW3Back + "/updateMatricula", regData, {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
             },
-            timeout: 5000, // @ 5 segundos de timeout
+            timeout: 5000,
           });
 
           res.json({

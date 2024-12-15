@@ -3,9 +3,10 @@ const db = require("../../../database/databaseconfig");
 const getAllDisciplina = async () => {
   return (
     await db.query(
-      "SELECT * FROM disciplina " +
-        "WHERE removidoDisciplina = false " + 
-        "ORDER BY dataAberturaDisciplina ASC"
+      "SELECT d.*, c.titulo FROM disciplina d " +
+      "LEFT JOIN Curso c ON d.idCurso = c.idCurso " +
+      "WHERE d.removidoDisciplina = false " +
+      "ORDER BY d.dataAberturaDisciplina ASC"
     )
   ).rows;
 };
@@ -13,9 +14,10 @@ const getAllDisciplina = async () => {
 const getDisciplinaByID = async (idDisciplinaPAR) => {
   return (
     await db.query(
-      "SELECT * FROM disciplina " +
-        "WHERE idDisciplina = $1 AND removidoDisciplina = false " +
-        "ORDER BY dataAberturaDisciplina ASC",
+      "SELECT d.*, c.titulo FROM disciplina d " +
+      "LEFT JOIN Curso c ON d.idCurso = c.idCurso " +
+      "WHERE d.idDisciplina = $1 AND d.removidoDisciplina = false " +
+      "ORDER BY d.dataAberturaDisciplina ASC",
       [idDisciplinaPAR]
     )
   ).rows;
@@ -51,12 +53,12 @@ const updateDisciplina = async (disciplinaREGPar) => {
     linhasAfetadas = (
       await db.query(
         "UPDATE disciplina SET " +
-          "tituloDisciplina = $2, " +
-          "chDisciplina = $3, " +
-          "dataAberturaDisciplina = $4, " +
-          "removidoDisciplina = $5, " +
-          "idCurso = $6 " +
-          "WHERE idDisciplina = $1",
+        "tituloDisciplina = $2, " +
+        "chDisciplina = $3, " +
+        "dataAberturaDisciplina = $4, " +
+        "removidoDisciplina = $5, " +
+        "idCurso = $6 " +
+        "WHERE idDisciplina = $1",
         [
           disciplinaREGPar.idDisciplina,
           disciplinaREGPar.tituloDisciplina,
@@ -82,9 +84,9 @@ const deleteDisciplina = async (disciplinaREGPar) => {
   try {
     linhasAfetadas = (
       await db.query(
-        "UPDATE disciplina SET removidoDisciplina = true " + 
-            "WHERE idDisciplina = $1",
-        [disciplinaREGPar.iddisciplina]
+        "UPDATE disciplina SET removidoDisciplina = true " +
+        "WHERE idDisciplina = $1",
+        [disciplinaREGPar.idDisciplina]
       )
     ).rowCount;
   } catch (error) {

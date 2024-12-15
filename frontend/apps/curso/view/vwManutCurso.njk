@@ -5,7 +5,7 @@
     <div class="col-xl-12">
 
       <div class="card-header mt-2">
-        Gerenciar de Cursos
+        Gerenciar Cursos
       </div>
 
       <div class="card-body">
@@ -58,7 +58,6 @@
 
     window.onload = function () {
       windowOnLoad();
-      // Caso tenha dado erro no servidor frontEnd, ele será mostrado aqui.
       const localErro = "{{ erro }}";
       if (localErro != "") {
         alert("[vwCurso|onload] Servidor retornou o erro: " + localErro);
@@ -83,26 +82,6 @@
               const year = date.getFullYear();
               dateCell.textContent = `${day}/${month}/${year}`;
             }
-          }
-        });
-
-      // Formata o valor da carga horária para o padrão brasileiro
-      document
-        .querySelectorAll('#tabCurso tbody tr')
-        .forEach(row => {
-          const currencyCell = row.cells[3];
-          const originalCurrency = currencyCell
-            .textContent
-            .trim();
-
-          const numericValue = parseFloat(originalCurrency.replace(/[^\d.-]/g, ''));
-          if (!isNaN(numericValue)) {
-            currencyCell.textContent = new Intl
-              .NumberFormat('pt-BR', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })
-              .format(numericValue);
           }
         });
     };

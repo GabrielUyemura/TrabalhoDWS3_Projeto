@@ -37,7 +37,7 @@ CREATE TABLE Aluno (
     idAluno SERIAL PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
     dataNasc DATE DEFAULT NULL,
-    renda DECIMAL(10, 2),
+    renda DECIMAL(10, 2) DEFAULT NULL,
     documento VARCHAR(20) UNIQUE NOT NULL,
     removido BOOLEAN DEFAULT FALSE
 );
