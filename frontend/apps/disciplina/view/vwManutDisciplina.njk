@@ -75,6 +75,26 @@
             dateCell.textContent = `${day}/${month}/${year}`;
           }
         });
+
+      // Formata valores decimais para o padrão brasileiro
+      document
+        .querySelectorAll('#tabDisciplinas tbody tr')
+        .forEach(row => {
+          const currencyCell = row.cells[4];
+          const originalCurrency = currencyCell
+            .textContent
+            .trim();
+
+          const numericValue = parseFloat(originalCurrency.replace(/[^\d.-]/g, ''));
+          if (!isNaN(numericValue)) {
+            currencyCell.textContent = new Intl
+              .NumberFormat('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              })
+              .format(numericValue);
+          }
+        });
     };
   </script>
 

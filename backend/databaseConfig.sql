@@ -17,7 +17,7 @@ CREATE TABLE Curso (
     idCurso SERIAL PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
     dataAbertura DATE NOT NULL,
-    cargaHoraria INT DEFAULT NULL,
+    cargaHoraria DECIMAL(10, 2) DEFAULT NULL,
     removido BOOLEAN DEFAULT FALSE
 );
 
@@ -25,7 +25,7 @@ CREATE TABLE Curso (
 CREATE TABLE Disciplina (
     idDisciplina SERIAL PRIMARY KEY,
     tituloDisciplina VARCHAR(255) NOT NULL,
-    chDisciplina INT DEFAULT NULL,
+    chDisciplina DECIMAL(10, 2) DEFAULT NULL,
     dataAberturaDisciplina DATE NOT NULL,
     removidoDisciplina BOOLEAN DEFAULT FALSE,
     idCurso INT NOT NULL,
