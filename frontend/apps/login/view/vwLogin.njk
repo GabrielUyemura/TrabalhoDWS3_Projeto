@@ -12,20 +12,23 @@
     </head>
     <body class="bg-primary">
         <div id="layoutAuthentication">
-            <div id="layoutAuthentication_content">
+            <div id="layoutAuthentication_content" class="container align-content-center mb-5">
                 <main>
                     <div class="container">
                         <div class="row justify-content-center">
-                            <div class="col-lg-5">
+                            <div class="col-lg-4">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header">
-                                        <h3 class="text-center font-weight-light my-4">Login</h3>
+                                        <div class="row justify-content-center">
+                                            <img src="../../../static/assets/img/brasao.png" class="img-fluid" style="width: 100px; heigth: 100px;"/>
+                                        </div>
+                                        <h3 class="text-center font-weight-light">Login</h3>
                                     </div>
                                     <div class="card-body">
                                         <form id="formLogin">
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" id="LoginUsuario" name="LoginUsuario" type="text" placeholder="Insira o Login" required="required"/>
-                                                <label for="labelLoginUsuario">Login *</label>
+                                                <label for="labelLoginUsuario">Usuário *</label>
                                             </div>
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" id="SenhaUsuario" name="SenhaUsuario" type="password" placeholder="Insira a Senha" required="required"/>
@@ -33,28 +36,15 @@
                                             </div>
                                             <div class="form-floating mb-3"></div>
                                             <div class="d-flex align-items-center justify-content-center mt-4 mb-0">
-                                                <button type="button" class="btn btn-primary" onclick="vwLogin()">Entrar</button>
+                                                <button type="button" class="btn btn-primary" onclick="vwLogin()" style="padding: 7px 30px; font-size: 16px">Entrar</button>
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="card-footer text-center py-3"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </main>
-            </div>
-            <div id="layoutAuthentication_footer">
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; DW3</div>
-                            <div>
-                                &middot;
-                            </div>
-                        </div>
-                    </div>
-                </footer>
             </div>
         </div>
         <script src="/static/js/5.3/bootstrap.bundle.min.js"></script>
