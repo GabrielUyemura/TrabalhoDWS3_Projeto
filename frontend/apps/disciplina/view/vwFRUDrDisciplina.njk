@@ -13,13 +13,14 @@
           <div class="">
             <form>
               <div class="row">
-                <div class="col-md-6"> 
+                <div class="col-md-2">
                   <div class="form-group mt-3">
-                    <label for="tituloDisciplina">Título</label>
-                    <input type="number" class="form-control" name="tituloDisciplina" id="tituloDisciplina" x-model="form.tituloDisciplina" x-bind:disabled="disabled">
+                    <label for="dataAberturaDisciplina">Data de Abertura</label>
+                    <input type="date" name="dataAberturaDisciplina" id="dataAberturaDisciplina" class="form-control" x-model="form.dataAberturaDisciplina" x-bind:disabled="disabled">
                   </div>
                 </div>
-                <div class="col-md-6">
+
+                <div class="col-md-3">
                   <div class="form-group mt-3">
                     <label for="idCurso">Curso</label>
                     <select class="form-control" name="idCurso" id="idCurso" x-model="form.idCurso" x-bind:disabled="disabled">
@@ -30,13 +31,15 @@
                     </select>
                   </div>
                 </div>
-                <div class="col-md-6">
+
+                <div class="col-md-5">
                   <div class="form-group mt-3">
-                    <label for="dataAberturaDisciplina">Abertura da Disciplina</label>
-                    <input type="date" name="dataAberturaDisciplina" id="dataAberturaDisciplina" class="form-control" x-model="form.dataAberturaDisciplina" x-bind:disabled="disabled">
+                    <label for="tituloDisciplina">Título</label>
+                    <input type="text" class="form-control" name="tituloDisciplina" id="tituloDisciplina" x-model="form.tituloDisciplina" x-bind:disabled="disabled">
                   </div>
                 </div>
-                <div class="col-md-6">
+
+                <div class="col-md-2">
                   <div class="form-group mt-3">
                     <label for="chDisciplina">Carga Horária (CH)</label>
                     <input type="number" class="form-control" name="chDisciplina" id="chDisciplina" x-model="form.chDisciplina" x-bind:disabled="disabled">
@@ -44,11 +47,9 @@
                 </div>
               </div>
 
-              <div class="mt-4">
-                <button type="button" @click="updateForm()" x-show="!disabled" class="btn btn-primary mt-4">Atualizar</button>
-                <button type="button" @click="deleteForm()" x-show="!disabled" class="btn btn-danger mt-4">Excluir</button>
-                <a href="/disciplina/manutDisciplina" class="btn btn-info mt-4 ml-2" role="button" aria-disabled="true">Voltar</a>
-              </div>
+              <button type="button" @click="updateForm()" x-show="!disabled" class="btn btn-primary mt-4">Atualizar</button>
+              <button type="button" @click="deleteForm()" x-show="!disabled" class="btn btn-danger mt-4">Excluir</button>
+              <a href="/disciplina/manutDisciplina" class="btn btn-info mt-4 ml-2" role="button" aria-disabled="true">Voltar</a>
             </form>
 
             <div class="mt-3">
@@ -80,8 +81,8 @@
           tituloDisciplina: "{{ data.titulodisciplina }}",
           chDisciplina: "{{ data.chdisciplina }}",
           dataAberturaDisciplina: "{{ data.dataaberturadisciplina }}",
-          idCurso: "{{ data.idCurso }}",
-          removido: false
+          idCurso: "{{ data.idcurso }}",
+          removidoDisciplina: false
         },
         message: '',
         messageClass: '',
@@ -148,7 +149,7 @@
             chDisciplina: '',
             dataAberturaDisciplina: '',
             idCurso: '',
-            removido: false
+            removidoDisciplina: false
           };
           this.message = '';
           this.messageClass = '';
