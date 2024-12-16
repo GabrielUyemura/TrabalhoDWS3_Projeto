@@ -96,7 +96,7 @@
             console.log("Dados recebidos:", result);
             if (result.status == "ok") {
               alert("Curso cadastrado com sucesso");
-              this.resetForm();
+              window.location.href = "/curso/manutCurso";
             } else {
               const errorData = result.status;
               this.message = `Erro! Não foi possível cadastrar o curso: ${errorData}`;

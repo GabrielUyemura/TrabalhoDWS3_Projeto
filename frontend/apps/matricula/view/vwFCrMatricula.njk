@@ -109,7 +109,7 @@
             console.log("Valor na result:", result);
             if (result.status == "ok") {
               alert("Matrícula cadastrada com suscesso");
-              this.resetForm();
+              window.location.href = "/matricula/manutMatricula";
             } else {
               const errorData = result.status;
               this.message = `Erro! Não foi possível cadastrar a matrícula devido ao erro: ${errorData}`;

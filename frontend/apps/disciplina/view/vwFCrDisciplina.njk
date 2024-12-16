@@ -43,7 +43,7 @@
                 <div class="col-md-2">
                   <div class="form-group">
                     <label for="chDisciplina">Carga Horária</label>
-                    <input type="number" class="form-control" id="chDisciplina" x-model="form.chDisciplina" placeholder="Carga Horária da Disciplina">
+                    <input type="number" class="form-control" id="chDisciplina" x-model="form.chDisciplina" placeholder="0,00">
                   </div>
                 </div>
               </div>
@@ -109,7 +109,7 @@
             console.log("Dados recebidos:", result);
             if (result.status == "ok") {
               alert("Disciplina cadastrado com sucesso");
-              this.resetForm();
+              window.location.href = "/disciplina/manutDisciplina";
             } else {
               const errorData = result.status;
               this.message = `Erro! Não foi possível cadastrar o Disciplina: ${errorData}`;

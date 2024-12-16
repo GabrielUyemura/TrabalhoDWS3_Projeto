@@ -104,7 +104,7 @@
             console.log("Dados recebidos:", result);
             if (result.status == "ok") {
               alert("Aluno cadastrado com sucesso");
-              this.resetForm();
+              window.location.href = "/aluno/manutAluno";
             } else {
               const errorData = result.status;
               this.message = `Erro! Não foi possível cadastrar o aluno: ${errorData}`;
