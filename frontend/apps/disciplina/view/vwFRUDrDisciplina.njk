@@ -106,8 +106,7 @@
 
             const result = await response.json();
             if (result.status === 'ok') {
-              this.message = 'Disciplina atualizada com sucesso.';
-              this.messageClass = 'alert alert-success';
+              alert("Disciplina atualizada com sucesso.");
             } else {
               this.message = `Erro: ${result.status}`;
               this.messageClass = 'alert alert-danger';
