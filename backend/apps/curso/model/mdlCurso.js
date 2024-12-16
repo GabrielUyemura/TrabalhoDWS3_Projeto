@@ -65,7 +65,7 @@ const updateCurso = async (cursoREGPar) => {
       )
     ).rowCount;
   } catch (error) {
-    msg = "[mdlCurso|insertCurso] " + error.detail;
+    msg = "[mdlCurso|updateCurso] " + error.detail;
     linhasAfetadas = -1;
   }
 

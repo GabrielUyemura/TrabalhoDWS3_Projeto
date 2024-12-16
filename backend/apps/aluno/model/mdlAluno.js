@@ -68,7 +68,7 @@ const updateAluno = async (alunoREGPar) => {
       )
     ).rowCount;
   } catch (error) {
-    msg = "[mdlAluno|insertAluno] " + error.detail;
+    msg = "[mdlAluno|updateAluno] " + error.detail;
     linhasAfetadas = -1;
   }
 

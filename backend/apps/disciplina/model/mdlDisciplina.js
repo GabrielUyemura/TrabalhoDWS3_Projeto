@@ -70,7 +70,7 @@ const updateDisciplina = async (disciplinaREGPar) => {
       )
     ).rowCount;
   } catch (error) {
-    msg = "[mdlDisciplina|insertDisciplina] " + error.detail;
+    msg = "[mdlDisciplina|updateDisciplina] " + error.detail;
     linhasAfetadas = -1;
   }
 
