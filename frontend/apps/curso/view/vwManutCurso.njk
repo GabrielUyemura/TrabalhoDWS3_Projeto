@@ -68,18 +68,11 @@
         .querySelectorAll('#tabCurso tbody tr')
         .forEach(row => {
           const dateCell = row.cells[1];
-          const originalDate = dateCell
-            .textContent
-            .trim();
+          const originalDate = dateCell.textContent.trim();
 
           if (originalDate) {
-            const date = new Date(originalDate);
-            if (!isNaN(date)) {
-              const day = String(date.getDate()).padStart(2, '0');
-              const month = String(date.getMonth() + 1).padStart(2, '0');
-              const year = date.getFullYear();
-              dateCell.textContent = `${day}/${month}/${year}`;
-            }
+            const [year, month, day] = originalDate.split('-');
+            dateCell.textContent = `${day}/${month}/${year}`;
           }
         });
 
